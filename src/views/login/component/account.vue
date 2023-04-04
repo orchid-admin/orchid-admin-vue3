@@ -44,7 +44,9 @@
 			</el-col>
 			<el-col :span="1"></el-col>
 			<el-col :span="8">
-				<el-button class="login-content-code" v-waves>1234</el-button>
+				<el-button class="login-content-code" @click="triggerCaptcha" v-waves>
+					<img :src="state.code_img" alt="" srcset="" />
+				</el-button>
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation4">
@@ -68,6 +70,7 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
+import { useLoginApi } from '/@/api/login';
 
 // 定义变量内容
 const { t } = useI18n();
@@ -81,11 +84,25 @@ const state = reactive({
 		userName: 'admin',
 		password: '123456',
 		code: '1234',
+		key: '',
 	},
 	loading: {
 		signIn: false,
 	},
+	code_img: '',
 });
+
+const login = useLoginApi();
+
+const triggerCaptcha = function () {
+	login.getCaptcha().then(function (res: any) {
+		// eslint-disable-next-line no-console
+		console.log(res);
+		state.code_img = res.image;
+		state.ruleForm.key = res.key;
+	});
+};
+triggerCaptcha();
 
 // 时间获取
 const currentTime = computed(() => {

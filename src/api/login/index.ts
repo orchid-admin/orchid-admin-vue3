@@ -9,6 +9,13 @@ import request from '/@/utils/request';
  */
 export function useLoginApi() {
 	return {
+		getCaptcha: (params?: object) => {
+			return request({
+				url: '/get_captcha',
+				method: 'get',
+				params,
+			});
+		},
 		signIn: (data: object) => {
 			return request({
 				url: '/user/signIn',
