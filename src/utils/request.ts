@@ -46,7 +46,7 @@ service.interceptors.response.use(
 			}
 			return Promise.reject(service.interceptors.response);
 		} else {
-			return response.data;
+			return res;
 		}
 	},
 	(error) => {
@@ -56,7 +56,7 @@ service.interceptors.response.use(
 		} else if (error.message == 'Network Error') {
 			ElMessage.error('网络连接错误');
 		} else {
-			if (error.response.data) ElMessage.error(error.response.statusText);
+			if (error.response.data) ElMessage.error(error.response.data.errmsg);
 			else ElMessage.error('接口路径找不到');
 		}
 		return Promise.reject(error);

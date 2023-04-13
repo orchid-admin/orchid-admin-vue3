@@ -16,6 +16,13 @@ export function useLoginApi() {
 				params,
 			});
 		},
+		login_by_account: (data: object) => {
+			return request({
+				url: '/login_by_account',
+				method: 'post',
+				data,
+			});
+		},
 		signIn: (data: object) => {
 			return request({
 				url: '/user/signIn',
