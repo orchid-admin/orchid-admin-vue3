@@ -95,9 +95,7 @@ const state = reactive({
 const login = useLoginApi();
 
 const triggerCaptcha = function () {
-	login.getCaptcha().then(function (res: any) {
-		// eslint-disable-next-line no-console
-		console.log(res);
+	login.getCaptcha().then(function (res) {
 		state.code_img = res.image;
 		state.ruleForm.key = res.key;
 	});
@@ -112,12 +110,12 @@ const currentTime = computed(() => {
 const onSignIn = async () => {
 	state.loading.signIn = true;
 	login
-		.login_by_account(state.ruleForm)
+		.loginByAccount(state.ruleForm)
 		.then(async (res) => {
 			// 存储 token 到浏览器缓存
 			Session.set('token', res.token);
 			// 模拟数据，对接接口时，记得删除多余代码及对应依赖的引入。用于 `/src/stores/userInfo.ts` 中不同用户登录判断（模拟数据）
-			Cookies.set('userName', res.user_nickname);
+			Cookies.set('userName', res.userName);
 			if (!themeConfig.value.isRequestRoutes) {
 				// 前端控制路由，2、请注意执行顺序
 				const isNoPower = await initFrontEndControlRoutes();

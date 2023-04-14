@@ -1,3 +1,5 @@
+import { GetCaptchaReponse, LoginByAccountRequest } from '/@/types/bindings';
+import { LoginReponse } from '/@/types/bindings/LoginReponse';
 import request from '/@/utils/request';
 
 /**
@@ -6,18 +8,20 @@ import request from '/@/utils/request';
  * 登录api接口集合
  * @method signIn 用户登录
  * @method signOut 用户退出登录
+ * @method getCaptcha 获取验证码
+ * @method login_by_account 账号登录
  */
 export function useLoginApi() {
 	return {
 		getCaptcha: (params?: object) => {
-			return request({
+			return request<any, GetCaptchaReponse>({
 				url: '/get_captcha',
 				method: 'get',
 				params,
 			});
 		},
-		login_by_account: (data: object) => {
-			return request({
+		loginByAccount: (data: object) => {
+			return request<LoginByAccountRequest, LoginReponse>({
 				url: '/login_by_account',
 				method: 'post',
 				data,

@@ -150,6 +150,8 @@ import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
 import { i18n } from '/@/i18n/index';
+import { useMenuApi } from '/@/api/menu';
+import { ElMessage } from 'element-plus';
 // import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
 
 // 定义子组件向父组件传值/事件
@@ -240,10 +242,16 @@ const onCancel = () => {
 };
 // 提交
 const onSubmit = () => {
-	closeDialog(); // 关闭弹窗
-	emit('refresh');
-	// if (state.dialog.type === 'add') { }
-	// setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
+	if (state.dialog.type === 'add') {
+		useMenuApi()
+			.create(state.ruleForm)
+			.then(() => {
+				ElMessage.success('新增成功');
+				closeDialog(); // 关闭弹窗
+				emit('refresh');
+				// setBackEndControlRefreshRoutes(); // 刷新菜单，未进行后端接口测试
+			});
+	}
 };
 // 页面加载时
 onMounted(() => {
