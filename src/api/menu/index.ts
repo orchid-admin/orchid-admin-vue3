@@ -1,3 +1,4 @@
+import { MenuCreateRequest } from '/@/types/bindings';
 import request from '/@/utils/request';
 
 /**
@@ -12,6 +13,13 @@ import request from '/@/utils/request';
  */
 export function useMenuApi() {
 	return {
+		create: (data?: Object) => {
+			return request<MenuCreateRequest, any>({
+				url: '/menu/create',
+				method: 'post',
+				data,
+			});
+		},
 		getAdminMenu: (params?: object) => {
 			return request({
 				url: '/gitee/lyt-top/vue-next-admin-images/raw/master/menu/adminMenu.json',

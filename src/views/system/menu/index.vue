@@ -9,7 +9,7 @@
 					</el-icon>
 					查询
 				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddMenu">
+				<el-button size="default" type="success" class="ml10" @click="onOpenAddMenu('add')">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>

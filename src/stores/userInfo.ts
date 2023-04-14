@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
 import { Session } from '/@/utils/storage';
+import { useUserApi } from '/@/api/user';
 
 /**
  * 用户信息
@@ -22,7 +23,7 @@ export const useUserInfo = defineStore('userInfo', {
 			if (Session.get('userInfo')) {
 				this.userInfos = Session.get('userInfo');
 			} else {
-				const userInfos: any = await this.getApiUserInfo();
+				const userInfos = <UserInfos>await useUserApi().getUserPermission();
 				this.userInfos = userInfos;
 			}
 		},
@@ -63,6 +64,7 @@ export const useUserInfo = defineStore('userInfo', {
 						roles: defaultRoles,
 						authBtnList: defaultAuthBtnList,
 					};
+					Session.set('userInfo', userInfos);
 					resolve(userInfos);
 				}, 0);
 			});
