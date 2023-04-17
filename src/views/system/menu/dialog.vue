@@ -62,7 +62,7 @@
 								</el-input>
 							</el-form-item>
 						</el-col>
-						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+						<!-- <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="权限标识">
 								<el-select v-model="state.ruleForm.meta.roles" multiple placeholder="取角色管理" clearable
 									class="w100">
@@ -70,7 +70,7 @@
 									<el-option label="common" value="common"></el-option>
 								</el-select>
 							</el-form-item>
-						</el-col>
+						</el-col> -->
 					</template>
 					<template v-if="state.ruleForm.menuType === 'btn'">
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
