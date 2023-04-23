@@ -3,11 +3,17 @@
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px">
 			<el-form ref="menuDialogFormRef" :model="state.ruleForm" size="default" label-width="80px">
 				<el-row :gutter="35">
-					<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
+					<!-- <el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 						<el-form-item label="上级菜单">
-							<el-cascader :options="state.menuData"
-								:props="{ checkStrictly: true, value: 'path', label: 'title' }" placeholder="请选择上级菜单"
-								clearable class="w100" v-model="state.ruleForm.menuSuperior">
+							<el-cascader
+								:options="state.menuData"
+								:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'title' }"
+								placeholder="请选择上级菜单"
+								clearable
+								class="w100"
+								filterable
+								v-model="state.ruleForm.parent_id"
+							>
 								<template #default="{ node, data }">
 									<span>{{ data.title }}</span>
 									<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -22,14 +28,13 @@
 								<el-radio label="btn">按钮</el-radio>
 							</el-radio-group>
 						</el-form-item>
-					</el-col>
+					</el-col> -->
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-						<el-form-item label="菜单名称">
-							<el-input v-model="state.ruleForm.meta.title" placeholder="格式：message.router.xxx"
-								clearable></el-input>
+						<el-form-item label="菜单名称" :rules="[{ required: true, message: '菜单名称不能为空' }]" prop="title">
+							<el-input v-model="state.ruleForm.meta.title" placeholder="格式：message.router.xxx" clearable></el-input>
 						</el-form-item>
 					</el-col>
-					<template v-if="state.ruleForm.menuType === 'menu'">
+					<!-- <template v-if="state.ruleForm.menuType === 'menu'">
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="路由名称">
 								<el-input v-model="state.ruleForm.name" placeholder="路由中的 name 值" clearable></el-input>
@@ -57,22 +62,17 @@
 						</el-col>
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="链接地址">
-								<el-input v-model="state.ruleForm.meta.isLink" placeholder="外链/内嵌时链接地址（http:xxx.com）"
-									clearable :disabled="!state.ruleForm.isLink">
+								<el-input
+									v-model="state.ruleForm.meta.isLink"
+									placeholder="外链/内嵌时链接地址（http:xxx.com）"
+									clearable
+									:disabled="!state.ruleForm.isLink"
+								>
 								</el-input>
 							</el-form-item>
 						</el-col>
-						<!-- <el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-							<el-form-item label="权限标识">
-								<el-select v-model="state.ruleForm.meta.roles" multiple placeholder="取角色管理" clearable
-									class="w100">
-									<el-option label="admin" value="admin"></el-option>
-									<el-option label="common" value="common"></el-option>
-								</el-select>
-							</el-form-item>
-						</el-col> -->
-					</template>
-					<template v-if="state.ruleForm.menuType === 'btn'">
+					</template> -->
+					<!-- <template v-if="state.ruleForm.menuType === 'btn'">
 						<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 							<el-form-item label="权限标识">
 								<el-input v-model="state.ruleForm.btnPower" placeholder="请输入权限标识" clearable></el-input>
@@ -81,8 +81,7 @@
 					</template>
 					<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 						<el-form-item label="菜单排序">
-							<el-input-number v-model="state.ruleForm.menuSort" controls-position="right" placeholder="请输入排序"
-								class="w100" />
+							<el-input-number v-model="state.ruleForm.menuSort" controls-position="right" placeholder="请输入排序" class="w100" />
 						</el-form-item>
 					</el-col>
 					<template v-if="state.ruleForm.menuType === 'menu'">
@@ -126,7 +125,7 @@
 								</el-radio-group>
 							</el-form-item>
 						</el-col>
-					</template>
+					</template> -->
 				</el-row>
 			</el-form>
 			<template #footer>
@@ -140,13 +139,14 @@
 </template>
 
 <script setup lang="ts" name="systemMenuDialog">
-import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
+import { defineAsyncComponent, reactive, onMounted, ref, nextTick } from 'vue';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
 import { i18n } from '/@/i18n/index';
 import { useMenuApi } from '/@/api/menu';
 import { ElMessage } from 'element-plus';
-import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
+import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
+import { MenuCreateRequest } from '/@/types/bindings';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['refresh']);
@@ -161,7 +161,8 @@ const { routesList } = storeToRefs(stores);
 const state = reactive({
 	// 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
 	ruleForm: {
-		menuSuperior: [], // 上级菜单
+		title: '',
+		parent_id: 0, // 上级菜单
 		menuType: 'menu', // 菜单类型
 		name: '', // 路由名称
 		component: '', // 组件路径
@@ -181,7 +182,7 @@ const state = reactive({
 			roles: '', // 权限标识，取角色管理
 		},
 		btnPower: '', // 菜单类型为按钮时，权限标识
-	},
+	} as MenuCreateRequest,
 	menuData: [] as RouteItems, // 上级菜单数据
 	dialog: {
 		isShowDialog: false,
@@ -214,10 +215,11 @@ const openDialog = (type: string, row?: any) => {
 		state.dialog.title = '新增菜单';
 		state.dialog.submitTxt = '新 增';
 		// 清空表单，此项需加表单验证才能使用
-		// nextTick(() => {
-		// 	menuDialogFormRef.value.resetFields();
-		// });
+		nextTick(() => {
+			menuDialogFormRef.value.resetFields();
+		});
 	}
+
 	state.dialog.type = type;
 	state.dialog.isShowDialog = true;
 };
@@ -245,6 +247,8 @@ const onSubmit = () => {
 				emit('refresh');
 				setBackEndControlRefreshRoutes(); // 刷新菜单，未进行后端接口测试
 			});
+	} else {
+		console.log(state.ruleForm);
 	}
 };
 // 页面加载时

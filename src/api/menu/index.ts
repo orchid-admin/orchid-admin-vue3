@@ -1,4 +1,4 @@
-import { MenuCreateRequest } from '/@/types/bindings';
+import { MenuCreateRequest, MenuInfo } from '/@/types/bindings';
 import request from '/@/utils/request';
 
 /**
@@ -18,6 +18,13 @@ export function useMenuApi() {
 				url: '/menu/create',
 				method: 'post',
 				data,
+			});
+		},
+		getUserMenu: (params?: object) => {
+			return request<any, MenuInfo[]>({
+				url: '/menu/index',
+				method: 'get',
+				params,
 			});
 		},
 		getAdminMenu: (params?: object) => {
