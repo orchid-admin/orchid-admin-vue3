@@ -22,6 +22,13 @@ export function useMenuApi() {
 		},
 		getUserMenu: (params?: object) => {
 			return request<any, MenuInfo[]>({
+				url: '/user/get_menu',
+				method: 'get',
+				params,
+			});
+		},
+		getTreeMenu: (params?: object) => {
+			return request<any, MenuInfo[]>({
 				url: '/menu/index',
 				method: 'get',
 				params,

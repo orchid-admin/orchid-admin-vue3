@@ -52,24 +52,33 @@
 				</el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onOpenAddMenu('add')">新增</el-button>
-						<el-button size="small" text type="primary" @click="onOpenEditMenu('edit', scope.row)">修改</el-button>
+						<el-button size="small" text type="primary" @click="onOpenAddMenu()">新增</el-button>
+						<el-button size="small" text type="primary" @click="onOpenEditMenu(scope.row)">修改</el-button>
 						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
 		</el-card>
-		<MenuDialog ref="menuDialogRef" @refresh="getTableData()" />
+		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
+			<MenuDialog ref="menuDialogRef" @refresh="getTableData()" :data="state.rowData" />
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button size="default" @click="onCancel">取 消</el-button>
+					<el-button type="primary" size="default" @click="onSubmit">提交</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
 <script setup lang="ts" name="systemMenu">
-import { defineAsyncComponent, ref, onMounted, reactive } from 'vue';
+import { defineAsyncComponent, onMounted, reactive, ref } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { storeToRefs } from 'pinia';
 import { useRoutesList } from '/@/stores/routesList';
 // import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
+const menuDialogRef = ref();
 
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
@@ -77,12 +86,18 @@ const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialo
 // 定义变量内容
 const stores = useRoutesList();
 const { routesList } = storeToRefs(stores);
-const menuDialogRef = ref();
 const state = reactive({
 	tableData: {
 		data: [] as RouteRecordRaw[],
 		loading: true,
 	},
+	dialog: {
+		isShowDialog: false,
+		type: '',
+		title: '',
+		submitTxt: '',
+	},
+	rowData: {},
 });
 
 // 获取路由数据，真实请从接口获取
@@ -94,12 +109,21 @@ const getTableData = () => {
 	}, 500);
 };
 // 打开新增菜单弹窗
-const onOpenAddMenu = (type: string) => {
-	menuDialogRef.value.openDialog(type);
+const onOpenAddMenu = () => {
+	state.dialog.isShowDialog = true;
+	state.rowData = {};
 };
+const onCancel = () => {
+	state.dialog.isShowDialog = false;
+};
+const onSubmit = () => {
+	menuDialogRef.value.onSubmit();
+};
+
 // 打开编辑菜单弹窗
-const onOpenEditMenu = (type: string, row: RouteRecordRaw) => {
-	menuDialogRef.value.openDialog(type, row);
+const onOpenEditMenu = (row: RouteRecordRaw) => {
+	state.dialog.isShowDialog = true;
+	state.rowData = row;
 };
 // 删除当前行
 const onTabelRowDel = (row: RouteRecordRaw) => {
