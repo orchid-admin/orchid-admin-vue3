@@ -21,7 +21,7 @@
 			</el-col>
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="菜单类型" prop="menuType">
-					<el-radio-group v-model="state.ruleForm.menuType">
+					<el-radio-group v-model="state.ruleForm.type">
 						<el-radio label="menu">菜单</el-radio>
 						<el-radio label="btn">按钮</el-radio>
 					</el-radio-group>
@@ -32,7 +32,7 @@
 					<el-input v-model="state.ruleForm.meta.title" placeholder="格式：message.router.xxx" clearable></el-input>
 				</el-form-item>
 			</el-col>
-			<template v-if="state.ruleForm.menuType === 'menu'">
+			<template v-if="state.ruleForm.type === 'menu'">
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="路由名称" prop="name">
 						<el-input v-model="state.ruleForm.name" placeholder="路由中的 name 值" clearable></el-input>
@@ -70,7 +70,7 @@
 					</el-form-item>
 				</el-col>
 			</template>
-			<template v-if="state.ruleForm.menuType === 'btn'">
+			<template v-if="state.ruleForm.type === 'btn'">
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="权限标识" prop="btnPower">
 						<el-input v-model="state.ruleForm.btnPower" placeholder="请输入权限标识" clearable></el-input>
@@ -82,7 +82,7 @@
 					<el-input-number v-model="state.ruleForm.menuSort" controls-position="right" placeholder="请输入排序" class="w100" />
 				</el-form-item>
 			</el-col>
-			<template v-if="state.ruleForm.menuType === 'menu'">
+			<template v-if="state.ruleForm.type === 'menu'">
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="是否隐藏" prop="meta.isHide">
 						<el-radio-group v-model="state.ruleForm.meta.isHide">
@@ -136,7 +136,7 @@ import { i18n } from '/@/i18n/index';
 import { useMenuApi } from '/@/api/menu';
 import { ElMessage } from 'element-plus';
 import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
-import { MenuCreateRequest } from '/@/types/bindings';
+import { MenuCreateRequest, MenuInfo } from '/@/types/bindings';
 
 // 引入组件
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
@@ -149,7 +149,7 @@ const state = reactive({
 	// 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
 	ruleForm: {
 		parent_id: 0, // 上级菜单
-		menuType: 'menu', // 菜单类型
+		type: 'menu', // 菜单类型
 		name: '', // 路由名称
 		component: '', // 组件路径
 		componentAlias: '', // 组件路径别名
@@ -165,10 +165,9 @@ const state = reactive({
 			isAffix: false, // 是否固定
 			isLink: '', // 外链/内嵌时链接地址（http:xxx.com），开启外链条件，`1、isLink: 链接地址不为空`
 			isIframe: false, // 是否内嵌，开启条件，`1、isIframe:true 2、isLink：链接地址不为空`
-			roles: '', // 权限标识，取角色管理
 		},
 		btnPower: '', // 菜单类型为按钮时，权限标识
-	} as MenuCreateRequest,
+	},
 	menuData: [] as RouteItems, // 上级菜单数据
 });
 

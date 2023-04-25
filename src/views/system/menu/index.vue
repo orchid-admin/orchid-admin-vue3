@@ -9,7 +9,7 @@
 					</el-icon>
 					查询
 				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddMenu('add')">
+				<el-button size="default" type="success" class="ml10" @click="onOpenAddMenu()">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
@@ -27,6 +27,8 @@
 					<template #default="scope">
 						<SvgIcon :name="scope.row.meta.icon" />
 						<span class="ml10">{{ $t(scope.row.meta.title) }}</span>
+						<el-tag type="success" size="small" v-if="scope.row.type == 'menu'">菜单</el-tag>
+						<el-tag type="info" size="small" v-if="scope.row.type == 'btn'">按钮权限</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column prop="path" label="路由路径" show-overflow-tooltip></el-table-column>
@@ -35,19 +37,9 @@
 						<span>{{ scope.row.component }}</span>
 					</template>
 				</el-table-column>
-				<el-table-column label="权限标识" show-overflow-tooltip>
-					<template #default="scope">
-						<span>{{ scope.row.meta.roles }}</span>
-					</template>
-				</el-table-column>
 				<el-table-column label="排序" show-overflow-tooltip width="80">
 					<template #default="scope">
 						{{ scope.$index }}
-					</template>
-				</el-table-column>
-				<el-table-column label="类型" show-overflow-tooltip width="80">
-					<template #default="scope">
-						<el-tag type="success" size="small">{{ scope.row.xx }}菜单</el-tag>
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
@@ -75,20 +67,18 @@
 import { defineAsyncComponent, onMounted, reactive, ref } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { storeToRefs } from 'pinia';
-import { useRoutesList } from '/@/stores/routesList';
+import { useMenuApi } from '/@/api/menu';
+import { MenuInfo } from '/@/types/bindings';
 // import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
 const menuDialogRef = ref();
-
+const menuApi = useMenuApi();
 // 引入组件
 const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialog.vue'));
 
 // 定义变量内容
-const stores = useRoutesList();
-const { routesList } = storeToRefs(stores);
 const state = reactive({
 	tableData: {
-		data: [] as RouteRecordRaw[],
+		data: [] as MenuInfo[],
 		loading: true,
 	},
 	dialog: {
@@ -103,10 +93,12 @@ const state = reactive({
 // 获取路由数据，真实请从接口获取
 const getTableData = () => {
 	state.tableData.loading = true;
-	state.tableData.data = routesList.value;
-	setTimeout(() => {
-		state.tableData.loading = false;
-	}, 500);
+	menuApi.getTreeMenu().then((res) => {
+		state.tableData.data = res;
+		setTimeout(() => {
+			state.tableData.loading = false;
+		}, 500);
+	});
 };
 // 打开新增菜单弹窗
 const onOpenAddMenu = () => {

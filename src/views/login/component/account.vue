@@ -1,32 +1,42 @@
 <template>
 	<el-form size="large" class="login-content-form">
 		<el-form-item class="login-animation1">
-			<el-input text :placeholder="$t('message.account.accountPlaceholder1')" v-model="state.ruleForm.username"
-				clearable autocomplete="off">
+			<el-input text :placeholder="$t('message.account.accountPlaceholder1')" v-model="state.ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2">
-			<el-input :type="state.isShowPassword ? 'text' : 'password'"
-				:placeholder="$t('message.account.accountPlaceholder2')" v-model="state.ruleForm.password"
-				autocomplete="off">
+			<el-input
+				:type="state.isShowPassword ? 'text' : 'password'"
+				:placeholder="$t('message.account.accountPlaceholder2')"
+				v-model="state.ruleForm.password"
+				autocomplete="new-password"
+			>
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
 				</template>
 				<template #suffix>
-					<i class="iconfont el-input__icon login-content-password"
+					<i
+						class="iconfont el-input__icon login-content-password"
 						:class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-						@click="state.isShowPassword = !state.isShowPassword">
+						@click="state.isShowPassword = !state.isShowPassword"
+					>
 					</i>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation3">
 			<el-col :span="15">
-				<el-input text maxlength="5" :placeholder="$t('message.account.accountPlaceholder3')"
-					v-model="state.ruleForm.code" clearable autocomplete="off">
+				<el-input
+					text
+					maxlength="5"
+					:placeholder="$t('message.account.accountPlaceholder3')"
+					v-model="state.ruleForm.code"
+					clearable
+					autocomplete="off"
+				>
 					<template #prefix>
 						<el-icon class="el-input__icon"><ele-Position /></el-icon>
 					</template>
@@ -40,8 +50,7 @@
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn"
-				:loading="state.loading.signIn">
+			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn" :loading="state.loading.signIn">
 				<span>{{ $t('message.account.accountBtnText') }}</span>
 			</el-button>
 		</el-form-item>
