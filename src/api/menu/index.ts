@@ -1,4 +1,4 @@
-import { MenuCreateRequest, MenuInfo } from '/@/types/bindings';
+import { MenuCreateRequest, MenuTree, UserMenuTree } from '/@/types/bindings';
 import request from '/@/utils/request';
 
 /**
@@ -21,14 +21,14 @@ export function useMenuApi() {
 			});
 		},
 		getUserMenu: (params?: object) => {
-			return request<any, MenuInfo[]>({
+			return request<any, UserMenuTree[]>({
 				url: '/user/get_menu',
 				method: 'get',
 				params,
 			});
 		},
 		getTreeMenu: (params?: object) => {
-			return request<any, MenuInfo[]>({
+			return request<any, MenuTree[]>({
 				url: '/menu/index',
 				method: 'get',
 				params,

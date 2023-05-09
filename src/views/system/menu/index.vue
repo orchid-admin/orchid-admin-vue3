@@ -16,13 +16,8 @@
 					新增菜单
 				</el-button>
 			</div>
-			<el-table
-				:data="state.tableData.data"
-				v-loading="state.tableData.loading"
-				style="width: 100%"
-				row-key="path"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-			>
+			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" row-key="path"
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.meta.icon" />
@@ -68,7 +63,7 @@ import { defineAsyncComponent, onMounted, reactive, ref } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useMenuApi } from '/@/api/menu';
-import { MenuInfo } from '/@/types/bindings';
+import { MenuTree } from '/@/types/bindings';
 // import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
 const menuDialogRef = ref();
 const menuApi = useMenuApi();
@@ -78,7 +73,7 @@ const MenuDialog = defineAsyncComponent(() => import('/@/views/system/menu/dialo
 // 定义变量内容
 const state = reactive({
 	tableData: {
-		data: [] as MenuInfo[],
+		data: [] as MenuTree[],
 		loading: true,
 	},
 	dialog: {
@@ -129,7 +124,7 @@ const onTabelRowDel = (row: RouteRecordRaw) => {
 			getTableData();
 			//await setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
 		})
-		.catch(() => {});
+		.catch(() => { });
 };
 // 页面加载时
 onMounted(() => {

@@ -1,5 +1,4 @@
-import { GetCaptchaReponse, LoginByAccountRequest } from '/@/types/bindings';
-import { LoginReponse } from '/@/types/bindings/LoginReponse';
+import { GetCaptchaReponse, LoginByAccountRequest, LoginReponse } from '/@/types/bindings';
 import request from '/@/utils/request';
 
 /**

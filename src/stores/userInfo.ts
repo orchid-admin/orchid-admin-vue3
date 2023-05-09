@@ -2,6 +2,7 @@ import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
 import { Session } from '/@/utils/storage';
 import { useUserApi } from '/@/api/user';
+import { UserPermission } from '../types/bindings';
 
 /**
  * 用户信息
@@ -23,8 +24,14 @@ export const useUserInfo = defineStore('userInfo', {
 			if (Session.get('userInfo')) {
 				this.userInfos = Session.get('userInfo');
 			} else {
-				const userInfos = <UserInfos>await useUserApi().getUserPermission();
-				this.userInfos = userInfos;
+				const userInfos = <UserPermission>await useUserApi().getUserPermission();
+				this.userInfos = {
+					userName: userInfos.username,
+					photo: userInfos.photo,
+					time: userInfos.time,
+					roles: userInfos.roles,
+					authBtnList: userInfos.btn_auths,
+				}
 			}
 		},
 		// 模拟接口数据
