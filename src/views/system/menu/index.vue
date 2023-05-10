@@ -16,30 +16,35 @@
 					新增菜单
 				</el-button>
 			</div>
-			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" row-key="path"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+			<el-table
+				:data="state.tableData.data"
+				v-loading="state.tableData.loading"
+				style="width: 100%"
+				row-key="id"
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+			>
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
-						<SvgIcon :name="scope.row.meta.icon" />
-						<span class="ml10">{{ $t(scope.row.meta.title) }}</span>
-						<el-tag type="success" size="small" v-if="scope.row.type == 'menu'">菜单</el-tag>
-						<el-tag type="info" size="small" v-if="scope.row.type == 'btn'">按钮权限</el-tag>
+						<SvgIcon :name="scope.row.icon" />
+						<span class="ml10">{{ $t(scope.row.title) }}</span>
+						<el-tag type="success" size="small" v-if="scope.row.type == 1">菜单</el-tag>
+						<el-tag type="info" size="small" v-if="scope.row.type == 2">重定向/目录</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="path" label="路由路径" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="router_path" label="路由路径" show-overflow-tooltip></el-table-column>
 				<el-table-column label="组件路径" show-overflow-tooltip>
 					<template #default="scope">
-						<span>{{ scope.row.component }}</span>
+						<span>{{ scope.row.router_component }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="排序" show-overflow-tooltip width="80">
 					<template #default="scope">
-						{{ scope.$index }}
+						{{ scope.row.sort }}
 					</template>
 				</el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onOpenAddMenu()">新增</el-button>
+						<el-button size="small" text type="primary" @click="onAddChildrenMenu(scope.row.id)">新增</el-button>
 						<el-button size="small" text type="primary" @click="onOpenEditMenu(scope.row)">修改</el-button>
 						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
 					</template>
@@ -47,7 +52,7 @@
 			</el-table>
 		</el-card>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
-			<MenuDialog ref="menuDialogRef" @refresh="getTableData()" :data="state.rowData" />
+			<MenuDialog ref="menuDialogRef" @refresh="dialogSuccess" :menuData="state.tableData.data" :id="state.row_id" :parent_id="state.row_parent_id" />
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button size="default" @click="onCancel">取 消</el-button>
@@ -64,7 +69,7 @@ import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useMenuApi } from '/@/api/menu';
 import { MenuTree } from '/@/types/bindings';
-// import { setBackEndControlRefreshRoutes } from "/@/router/backEnd";
+import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
 const menuDialogRef = ref();
 const menuApi = useMenuApi();
 // 引入组件
@@ -82,12 +87,14 @@ const state = reactive({
 		title: '',
 		submitTxt: '',
 	},
-	rowData: {},
+	row_id: 0,
+	row_parent_id: 0,
 });
 
 // 获取路由数据，真实请从接口获取
 const getTableData = () => {
 	state.tableData.loading = true;
+	state.dialog.isShowDialog = false;
 	menuApi.getTreeMenu().then((res) => {
 		state.tableData.data = res;
 		setTimeout(() => {
@@ -95,10 +102,21 @@ const getTableData = () => {
 		}, 500);
 	});
 };
+const dialogSuccess = () => {
+	getTableData();
+	setBackEndControlRefreshRoutes();
+};
 // 打开新增菜单弹窗
 const onOpenAddMenu = () => {
 	state.dialog.isShowDialog = true;
-	state.rowData = {};
+	state.row_id = 0;
+	state.row_parent_id = 0;
+};
+// 新增子级菜单
+const onAddChildrenMenu = (menu_id) => {
+	state.dialog.isShowDialog = true;
+	state.row_id = 0;
+	state.row_parent_id = menu_id;
 };
 const onCancel = () => {
 	state.dialog.isShowDialog = false;
@@ -110,7 +128,8 @@ const onSubmit = () => {
 // 打开编辑菜单弹窗
 const onOpenEditMenu = (row: RouteRecordRaw) => {
 	state.dialog.isShowDialog = true;
-	state.rowData = row;
+	state.row_id = row.id;
+	state.row_parent_id = 0;
 };
 // 删除当前行
 const onTabelRowDel = (row: RouteRecordRaw) => {
@@ -124,7 +143,7 @@ const onTabelRowDel = (row: RouteRecordRaw) => {
 			getTableData();
 			//await setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
 		})
-		.catch(() => { });
+		.catch(() => {});
 };
 // 页面加载时
 onMounted(() => {

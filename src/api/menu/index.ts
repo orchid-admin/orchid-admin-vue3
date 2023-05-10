@@ -15,8 +15,15 @@ export function useMenuApi() {
 	return {
 		create: (data?: Object) => {
 			return request<MenuCreateRequest, any>({
-				url: '/menu/create',
+				url: '/menu',
 				method: 'post',
+				data,
+			});
+		},
+		update: (id: Number, data?: Object) => {
+			return request<MenuCreateRequest, any>({
+				url: '/menu/' + id,
+				method: 'put',
 				data,
 			});
 		},
@@ -29,9 +36,15 @@ export function useMenuApi() {
 		},
 		getTreeMenu: (params?: object) => {
 			return request<any, MenuTree[]>({
-				url: '/menu/index',
+				url: '/menu',
 				method: 'get',
 				params,
+			});
+		},
+		getInfo: (id: Number) => {
+			return request<any, MenuTree[]>({
+				url: '/menu/' + id,
+				method: 'get',
 			});
 		},
 		getAdminMenu: (params?: object) => {

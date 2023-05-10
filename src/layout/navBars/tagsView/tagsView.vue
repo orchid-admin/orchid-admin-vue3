@@ -383,6 +383,7 @@ const onMousedownMenu = (v: RouteItem, e: MouseEvent) => {
 // 当前的 tagsView 项点击时
 const onTagsClick = (v: RouteItem, k: number) => {
 	state.tagsRefsIndex = k;
+	console.log(v, k);
 	router.push(v);
 	// 分栏布局时，收起/展开菜单
 	if (getThemeConfig.value.layout === 'columns') {

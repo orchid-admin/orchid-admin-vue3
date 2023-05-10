@@ -115,7 +115,7 @@ export function getBackEndControlRoutes() {
  * @description 路径：/src/views/system/menu/component/addMenu.vue
  */
 export async function setBackEndControlRefreshRoutes() {
-	await getBackEndControlRoutes();
+	await initBackEndControlRoutes();
 }
 
 /**
@@ -127,6 +127,8 @@ export function backEndComponent(routes: any) {
 	if (!routes) return;
 	return routes.map((item: any) => {
 		if (item.component) item.component = dynamicImport(dynamicViewsModules, item.component as string);
+		if (item.meta.isIframe) item.component = () => import('/@/layout/routerView/iframes.vue');
+		if (!item.meta.isIframe && item.meta.isLink) item.component = () => import('/@/layout/routerView/link.vue');
 		item.children && backEndComponent(item.children);
 		return item;
 	});
