@@ -16,19 +16,22 @@
 					新增菜单
 				</el-button>
 			</div>
-			<el-table
-				:data="state.tableData.data"
-				v-loading="state.tableData.loading"
-				style="width: 100%"
-				row-key="id"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-			>
+			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%" row-key="id"
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.icon" />
 						<span class="ml10">{{ $t(scope.row.title) }}</span>
-						<el-tag type="success" size="small" v-if="scope.row.type == 1">菜单</el-tag>
-						<el-tag type="info" size="small" v-if="scope.row.type == 2">重定向/目录</el-tag>
+					</template>
+				</el-table-column>
+				<el-table-column label="菜单类型">
+					<template #default="scope">
+						<el-text size="small" type="success" v-if="scope.row.type == 1">菜单</el-text>
+						<el-text size="small" type="success" v-if="scope.row.type == 2">重定向/目录</el-text>
+						<el-text size="small" type="success" v-if="scope.row.type == 3">外链</el-text>
+						<el-text size="small" type="success" v-if="scope.row.type == 4">内嵌</el-text>
+						<el-text size="small" type="success" v-if="scope.row.type == 5">权限</el-text>
+						<el-text size="small" type="success" v-if="scope.row.type == 5">API接口</el-text>
 					</template>
 				</el-table-column>
 				<el-table-column prop="router_path" label="路由路径" show-overflow-tooltip></el-table-column>
@@ -52,7 +55,8 @@
 			</el-table>
 		</el-card>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
-			<MenuDialog ref="menuDialogRef" @refresh="dialogSuccess" :menuData="state.tableData.data" :id="state.row_id" :parent_id="state.row_parent_id" />
+			<MenuDialog ref="menuDialogRef" @refresh="dialogSuccess" :menuData="state.tableData.data" :id="state.row_id"
+				:parent_id="state.row_parent_id" />
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button size="default" @click="onCancel">取 消</el-button>
@@ -65,10 +69,9 @@
 
 <script setup lang="ts" name="systemMenu">
 import { defineAsyncComponent, onMounted, reactive, ref } from 'vue';
-import { RouteRecordRaw } from 'vue-router';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { useMenuApi } from '/@/api/menu';
-import { MenuTree } from '/@/types/bindings';
+import { MenuInfo, MenuTree } from '/@/types/bindings';
 import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
 const menuDialogRef = ref();
 const menuApi = useMenuApi();
@@ -113,7 +116,7 @@ const onOpenAddMenu = () => {
 	state.row_parent_id = 0;
 };
 // 新增子级菜单
-const onAddChildrenMenu = (menu_id) => {
+const onAddChildrenMenu = (menu_id: number) => {
 	state.dialog.isShowDialog = true;
 	state.row_id = 0;
 	state.row_parent_id = menu_id;
@@ -126,24 +129,30 @@ const onSubmit = () => {
 };
 
 // 打开编辑菜单弹窗
-const onOpenEditMenu = (row: RouteRecordRaw) => {
+const onOpenEditMenu = (row: MenuInfo) => {
 	state.dialog.isShowDialog = true;
 	state.row_id = row.id;
 	state.row_parent_id = 0;
 };
 // 删除当前行
-const onTabelRowDel = (row: RouteRecordRaw) => {
-	ElMessageBox.confirm(`此操作将永久删除路由：${row.path}, 是否继续?`, '提示', {
+const onTabelRowDel = (row: MenuInfo) => {
+	ElMessageBox.confirm(`此操作将永久删除路由：${row.title}, 是否继续?`, '提示', {
 		confirmButtonText: '删除',
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
-		.then(() => {
-			ElMessage.success('删除成功');
-			getTableData();
-			//await setBackEndControlRefreshRoutes() // 刷新菜单，未进行后端接口测试
+		.then(async () => {
+			menuApi.delete(row.id).then(async () => {
+				ElMessage.success('删除成功');
+				getTableData();
+				await setBackEndControlRefreshRoutes()
+			}).catch(() => {
+				ElMessage.error("删除失败");
+			})
+
+
 		})
-		.catch(() => {});
+		.catch(() => { });
 };
 // 页面加载时
 onMounted(() => {

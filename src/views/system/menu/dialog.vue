@@ -3,15 +3,9 @@
 		<el-row :gutter="35">
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="上级菜单" prop="parent_id">
-					<el-cascader
-						:options="state.menuData"
-						:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'title' }"
-						placeholder="请选择上级菜单"
-						clearable
-						class="w100"
-						filterable
-						v-model="state.ruleForm.parent_id"
-					>
+					<el-cascader :options="state.menuData"
+						:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'title' }" placeholder="请选择上级菜单"
+						clearable class="w100" filterable v-model="state.ruleForm.parent_id">
 						<template #default="{ node, data }">
 							<span>{{ data.title }}</span>
 							<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -100,10 +94,7 @@
 						<el-select v-model="state.ruleForm.api_method" placeholder="请选择请求方法" clearable>
 							<el-option
 								v-for="item in ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH']"
-								:key="item"
-								:label="item"
-								:value="item"
-							/>
+								:key="item" :label="item" :value="item" />
 						</el-select>
 					</el-form-item>
 				</el-col>
@@ -136,7 +127,8 @@
 			</template>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 				<el-form-item label="菜单排序" prop="sort">
-					<el-input-number v-model="state.ruleForm.sort" controls-position="right" placeholder="请输入排序" class="w100" />
+					<el-input-number v-model="state.ruleForm.sort" controls-position="right" placeholder="请输入排序"
+						class="w100" />
 				</el-form-item>
 			</el-col>
 		</el-row>
@@ -149,7 +141,7 @@ import { i18n } from '/@/i18n/index';
 import { useMenuApi } from '/@/api/menu';
 import { ElMessage } from 'element-plus';
 import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
-import { MenuCreateRequest, MenuInfo } from '/@/types/bindings';
+import { MenuCreateRequest } from '/@/types/bindings';
 
 // 引入组件
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
@@ -212,8 +204,8 @@ const onSubmit = () => {
 onMounted(() => {
 	state.menuData = getMenuData(props.menuData);
 	if (props.id) {
-		menuApi.getInfo(props.id).then((info) => {
-			state.ruleForm = info as MenuInfo;
+		menuApi.getInfo(props.id).then((res) => {
+			state.ruleForm = res;
 		});
 	}
 	if (props.parent_id) {

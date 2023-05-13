@@ -75,6 +75,11 @@ export default {
 		layoutIframeViewOne: 'IframeViewOne',
 		layoutIframeViewTwo: 'IframeViewTwo',
 	},
+	btnAuths: {
+		add: "Add",
+		edit: "Edit",
+		del: "Delete",
+	},
 	staticRoutes: {
 		signIn: 'signIn',
 		notFound: 'notFound',

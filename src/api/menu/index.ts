@@ -1,4 +1,4 @@
-import { MenuCreateRequest, MenuTree, UserMenuTree } from '/@/types/bindings';
+import { MenuCreateRequest, MenuInfo, MenuTree, UserMenuTree } from '/@/types/bindings';
 import request from '/@/utils/request';
 
 /**
@@ -27,6 +27,12 @@ export function useMenuApi() {
 				data,
 			});
 		},
+		delete: (id: number) => {
+			return request<any, any>({
+				url: '/menu'+id,
+				method: 'delete',
+			});
+		},
 		getUserMenu: (params?: object) => {
 			return request<any, UserMenuTree[]>({
 				url: '/user/get_menu',
@@ -41,8 +47,8 @@ export function useMenuApi() {
 				params,
 			});
 		},
-		getInfo: (id: Number) => {
-			return request<any, MenuTree[]>({
+		getInfo: (id: number) => {
+			return request<any, MenuInfo>({
 				url: '/menu/' + id,
 				method: 'get',
 			});

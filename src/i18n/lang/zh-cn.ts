@@ -75,6 +75,11 @@ export default {
 		layoutIframeViewOne: '内嵌 iframe1',
 		layoutIframeViewTwo: '内嵌 iframe2',
 	},
+	btnAuths: {
+		add: "新增",
+		edit: "编辑",
+		del: "删除",
+	},
 	staticRoutes: {
 		signIn: '登录',
 		notFound: '找不到此页面',
