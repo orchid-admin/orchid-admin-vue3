@@ -8,12 +8,7 @@ import { dynamicRoutes, notFoundAndNoPower } from '/@/router/route';
 import { formatTwoStageRoutes, formatFlatteningRoutes, router } from '/@/router/index';
 import { useRoutesList } from '/@/stores/routesList';
 import { useTagsViewRoutes } from '/@/stores/tagsViewRoutes';
-import { useMenuApi } from '/@/api/menu/index';
-
-// 后端控制路由
-
-// 引入 api 请求接口
-const menuApi = useMenuApi();
+import { getUserMenu } from '/@/api/menu';
 
 /**
  * 获取目录下的 .vue、.tsx 全部文件
@@ -106,7 +101,7 @@ export async function setAddRoute() {
  * @returns 返回后端路由菜单数据
  */
 export function getBackEndControlRoutes() {
-	return menuApi.getUserMenu();
+	return getUserMenu();
 }
 
 /**

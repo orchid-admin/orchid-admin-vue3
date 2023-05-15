@@ -58,7 +58,7 @@ import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
-import { useLoginApi } from '/@/api/login';
+import { getCaptcha,loginByAccount } from '/@/api/auth';
 
 // 定义变量内容
 const { t } = useI18n();
@@ -78,10 +78,8 @@ const state = reactive({
 	code_img: '',
 });
 
-const login = useLoginApi();
-
 const triggerCaptcha = function () {
-	login.getCaptcha().then(function (res) {
+	getCaptcha().then(function (res) {
 		state.code_img = res.image;
 		state.ruleForm.key = res.key;
 		state.ruleForm.code = '';
@@ -96,8 +94,7 @@ const currentTime = computed(() => {
 // 登录
 const onSignIn = async () => {
 	state.loading.signIn = true;
-	login
-		.loginByAccount(state.ruleForm)
+	loginByAccount(state.ruleForm)
 		.then(async (res) => {
 			// 存储 token 到浏览器缓存
 			Session.set('token', res.token);

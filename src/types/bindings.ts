@@ -122,6 +122,19 @@ interface UserMenuMeta {
 	isKeepAlive?: boolean;
 }
 /**
+ * 菜单-搜索
+ */
+export interface MenuSearchRequest {
+	/**
+	 * 关键字
+	 */
+	keyword: string;
+	/**
+	 * 菜单类型
+	 */
+	menu_types: number[];
+}
+/**
  * 菜单-新增
  */
 export interface MenuCreateRequest {

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import Cookies from 'js-cookie';
 import { Session } from '/@/utils/storage';
-import { useUserApi } from '/@/api/user';
+import { getUserPermission } from '/@/api/user';
 import { UserPermission } from '../types/bindings';
 
 /**
@@ -24,7 +24,7 @@ export const useUserInfo = defineStore('userInfo', {
 			if (Session.get('userInfo')) {
 				this.userInfos = Session.get('userInfo');
 			} else {
-				const userInfos = <UserPermission>await useUserApi().getUserPermission();
+				const userInfos = <UserPermission>await getUserPermission();
 				this.userInfos = {
 					userName: userInfos.username,
 					photo: userInfos.photo,

@@ -10,7 +10,7 @@ const service: AxiosInstance = axios.create({
 	headers: { 'Content-Type': 'application/json' },
 	paramsSerializer: {
 		serialize(params) {
-			return qs.stringify(params, { allowDots: true });
+			return qs.stringify(params, { allowDots: true, arrayFormat: 'repeat' }); //
 		},
 	},
 });
