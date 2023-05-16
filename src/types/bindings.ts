@@ -501,3 +501,123 @@ export interface RoleInfo {
 	 */
 	menu_ids: number[];
 }
+
+/**
+ * 部门-树形
+ */
+export interface DeptTree {
+	/**
+	 * 子级
+	 */
+	children: DeptTree[];
+	/**
+	 * 部门描述
+	 */
+	describe: string;
+	/**
+	 * 部门ID
+	 */
+	id: number;
+	/**
+	 * 部门名称
+	 */
+	name: string;
+	/**
+	 * 父级ID
+	 */
+	parent_id: number;
+	/**
+	 * 负责人邮箱
+	 */
+	person_email: string;
+	/**
+	 * 负责人姓名
+	 */
+	person_name: string;
+	/**
+	 * 负责人电话
+	 */
+	person_phone: string;
+	/**
+	 * 状态
+	 */
+	status: boolean;
+}
+/**
+ * 部门-新增
+ */
+export interface DeptCreateRequest {
+	/**
+	 * 部门描述
+	 */
+	describe?: string;
+	/**
+	 * 部门名称
+	 */
+	name: string;
+	/**
+	 * 父级ID
+	 */
+	parent_id: number;
+	/**
+	 * 部门负责人邮箱
+	 */
+	person_email?: string;
+	/**
+	 * 部门负责人姓名
+	 */
+	person_name?: string;
+	/**
+	 * 部门负责人电话
+	 */
+	person_phone?: string;
+	/**
+	 * 排序
+	 */
+	sort: number;
+	/**
+	 * 状态
+	 */
+	status: boolean;
+}
+/**
+ * 部门-详情
+ */
+export interface DeptInfo {
+	/**
+	 * 部门描述
+	 */
+	describe: string;
+	/**
+	 * 部门ID
+	 */
+	id: number;
+	/**
+	 * 部门名称
+	 */
+	name: string;
+	/**
+	 * 父级ID
+	 */
+	parent_id: number;
+	/**
+	 * 负责人邮箱
+	 */
+	person_email: string;
+	/**
+	 * 负责人姓名
+	 */
+	person_name: string;
+	/**
+	 * 负责人电话
+	 */
+	person_phone: string;
+	/**
+	 * 状态
+	 */
+	status: boolean;
+	/**
+	 * 排序
+	 */
+	sort: number;
+}

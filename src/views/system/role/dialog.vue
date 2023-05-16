@@ -18,7 +18,8 @@
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 				<el-form-item label="排序">
-					<el-input-number v-model="state.ruleForm.sort" :min="0" :max="999" controls-position="right" placeholder="请输入排序" class="w100" />
+					<el-input-number v-model="state.ruleForm.sort" :min="0" :max="999" controls-position="right"
+						placeholder="请输入排序" class="w100" />
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -28,20 +29,14 @@
 			</el-col>
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="角色描述">
-					<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
+					<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入角色描述"
+						maxlength="150"></el-input>
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="菜单权限">
-					<el-tree
-						ref="treeRef"
-						node-key="id"
-						:data="state.menuData"
-						:props="state.menuProps"
-						:default-checked-keys="state.ruleForm.menu_ids"
-						show-checkbox
-						class="menu-data-tree"
-					/>
+					<el-tree ref="treeRef" node-key="id" :data="state.menuData" :props="state.menuProps"
+						:default-checked-keys="state.ruleForm.menu_ids" show-checkbox class="menu-data-tree" />
 				</el-form-item>
 			</el-col>
 		</el-row>
