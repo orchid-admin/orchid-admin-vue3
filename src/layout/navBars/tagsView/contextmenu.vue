@@ -20,7 +20,7 @@
 						@click="onCurrentContextmenuClick(v.contextMenuClickId)"
 					>
 						<SvgIcon :name="v.icon" />
-						<span>{{ $t(v.txt) }}</span>
+						<span>{{ v.txt }}</span>
 					</li>
 				</template>
 			</ul>

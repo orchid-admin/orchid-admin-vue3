@@ -378,3 +378,126 @@ export interface MenuInfo {
 	 */
 	updated_time: string;
 }
+/**
+ * 分页请求
+ */
+export interface PaginateRequest {
+	/**
+	 * 当前页数
+	 */
+	page: number;
+	/**
+	 * 每页显示数量
+	 */
+	limit: number;
+}
+/**
+ * 分页响应
+ */
+export interface PaginateResponse<T> {
+	data: T[];
+	/**
+	 * 数据总条数
+	 */
+	total: number;
+}
+export interface RoleSearchRequest extends PaginateRequest {
+	keyword: string;
+	status?: boolean;
+}
+/**
+ * 角色-新增
+ */
+export interface RoleCreateRequest {
+	/**
+	 * 描述（备注）
+	 */
+	describe: string;
+	/**
+	 * 菜单ID 数组
+	 */
+	menu_ids: number[];
+	/**
+	 * 角色名称
+	 */
+	name: string;
+	/**
+	 * 角色标识
+	 */
+	sign: string;
+	/**
+	 * 排序
+	 */
+	sort: number;
+	/**
+	 * 状态
+	 */
+	status: boolean;
+}
+/**
+ * 角色-列表
+ */
+export interface RoleList {
+	/**
+	 * 是否可删除
+	 */
+	_can_delete?: boolean;
+	/**
+	 * 是否可编辑
+	 */
+	_can_edit?: boolean;
+	/**
+	 * 角色描述
+	 */
+	describe?: string;
+	/**
+	 * 角色ID
+	 */
+	id: number;
+	/**
+	 * 角色名称
+	 */
+	name?: string;
+	/**
+	 * 角色标识
+	 */
+	sign?: string;
+	/**
+	 * 角色状态
+	 */
+	status?: boolean;
+}
+
+/**
+ * 角色-详情
+ */
+export interface RoleInfo {
+	/**
+	 * 角色描述
+	 */
+	describe: string;
+	/**
+	 * 角色ID
+	 */
+	id: number;
+	/**
+	 * 角色名称
+	 */
+	name: string;
+	/**
+	 * 角色标识
+	 */
+	sign: string;
+	/**
+	 * 状态
+	 */
+	status: boolean;
+	/**
+	 * 排序
+	 */
+	sort: number;
+	/**
+	 * 菜单ID
+	 */
+	menu_ids: number[];
+}

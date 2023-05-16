@@ -3,7 +3,7 @@
 		<div ref="qrcodeRef"></div>
 		<div class="font12 mt20 login-msg">
 			<i class="iconfont icon-saoyisao mr5"></i>
-			<span>{{ $t('message.scan.text') }}</span>
+			<span>打开手机扫一扫，快速登录/注册</span>
 		</div>
 	</div>
 </template>

@@ -145,7 +145,6 @@
 
 <script setup lang="ts" name="systemMenuDialog">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
-import { i18n } from '/@/i18n/index';
 import { createMenu, updateMenu, getMenuInfo } from '/@/api/menu';
 import { ElMessage } from 'element-plus';
 import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
@@ -184,7 +183,6 @@ const state = reactive({
 const getMenuData = (routes: RouteItems) => {
 	const arr: RouteItems = [];
 	routes.map((val: RouteItem) => {
-		val['title'] = i18n.global.t(val.title as string);
 		arr.push({ ...val });
 		if (val.children) getMenuData(val.children);
 	});

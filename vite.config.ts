@@ -11,7 +11,6 @@ const pathResolve = (dir: string) => {
 
 const alias: Record<string, string> = {
 	'/@': pathResolve('./src/'),
-	'vue-i18n': 'vue-i18n/dist/vue-i18n.cjs.js',
 };
 
 const viteConfig = defineConfig((mode: ConfigEnv) => {
@@ -61,8 +60,6 @@ const viteConfig = defineConfig((mode: ConfigEnv) => {
 		},
 		css: { preprocessorOptions: { css: { charset: false } } },
 		define: {
-			__VUE_I18N_LEGACY_API__: JSON.stringify(false),
-			__VUE_I18N_FULL_INSTALL__: JSON.stringify(false),
 			__INTLIFY_PROD_DEVTOOLS__: JSON.stringify(false),
 			__NEXT_VERSION__: JSON.stringify(process.env.npm_package_version),
 			__NEXT_NAME__: JSON.stringify(process.env.npm_package_name),

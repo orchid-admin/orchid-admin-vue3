@@ -22,10 +22,10 @@
 					<div class="login-right-warp-main-form">
 						<div v-if="!state.isScan">
 							<el-tabs v-model="state.tabsActiveName">
-								<el-tab-pane :label="$t('message.label.one1')" name="account">
+								<el-tab-pane label="用户名登录" name="account">
 									<Account />
 								</el-tab-pane>
-								<el-tab-pane :label="$t('message.label.two2')" name="mobile">
+								<el-tab-pane label="手机号登录" name="mobile">
 									<Mobile />
 								</el-tab-pane>
 							</el-tabs>

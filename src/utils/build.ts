@@ -56,11 +56,6 @@ export const buildConfig = {
 				// 	path: 'dist/echarts-wordcloud.min.js',
 				// },
 				// {
-				// 	name: 'vue-i18n',
-				// 	var: 'VueI18n',
-				// 	path: 'dist/vue-i18n.global.min.js',
-				// },
-				// {
 				// 	name: 'jsplumb',
 				// 	var: 'jsPlumb',
 				// 	path: 'dist/js/jsplumb.min.js',
@@ -112,7 +107,6 @@ export const buildConfig = {
 		// 'echarts',
 		// 'echarts-gl',
 		// 'echarts-wordcloud',
-		// 'vue-i18n',
 		// 'jsplumb',
 		// 'cropperjs',
 		// 'sortablejs',

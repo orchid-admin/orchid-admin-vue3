@@ -1,32 +1,30 @@
 <template>
 	<el-form size="large" class="login-content-form">
 		<el-form-item class="login-animation1">
-			<el-input text :placeholder="$t('message.account.accountPlaceholder1')" v-model="state.ruleForm.username"
-				clearable autocomplete="off">
+			<el-input text placeholder="用户名" v-model="state.ruleForm.username" clearable autocomplete="off">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-User /></el-icon>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2">
-			<el-input :type="state.isShowPassword ? 'text' : 'password'"
-				:placeholder="$t('message.account.accountPlaceholder2')" v-model="state.ruleForm.password"
-				autocomplete="new-password">
+			<el-input :type="state.isShowPassword ? 'text' : 'password'" placeholder="密码" v-model="state.ruleForm.password" autocomplete="new-password">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
 				</template>
 				<template #suffix>
-					<i class="iconfont el-input__icon login-content-password"
+					<i
+						class="iconfont el-input__icon login-content-password"
 						:class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-						@click="state.isShowPassword = !state.isShowPassword">
+						@click="state.isShowPassword = !state.isShowPassword"
+					>
 					</i>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation3">
 			<el-col :span="15">
-				<el-input text maxlength="5" :placeholder="$t('message.account.accountPlaceholder3')"
-					v-model="state.ruleForm.code" clearable autocomplete="off">
+				<el-input text maxlength="5" placeholder="请输入验证码" v-model="state.ruleForm.code" clearable autocomplete="off">
 					<template #prefix>
 						<el-icon class="el-input__icon"><ele-Position /></el-icon>
 					</template>
@@ -40,9 +38,8 @@
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn"
-				:loading="state.loading.signIn">
-				<span>{{ $t('message.account.accountBtnText') }}</span>
+			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn" :loading="state.loading.signIn">
+				<span>登 录</span>
 			</el-button>
 		</el-form-item>
 	</el-form>
@@ -52,16 +49,14 @@
 import { reactive, computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import { useI18n } from 'vue-i18n';
 import Cookies from 'js-cookie';
 import { initBackEndControlRoutes } from '/@/router/backEnd';
 import { Session } from '/@/utils/storage';
 import { formatAxis } from '/@/utils/formatTime';
 import { NextLoading } from '/@/utils/loading';
-import { getCaptcha,loginByAccount } from '/@/api/auth';
+import { getCaptcha, loginByAccount } from '/@/api/auth';
 
 // 定义变量内容
-const { t } = useI18n();
 const route = useRoute();
 const router = useRouter();
 const state = reactive({
@@ -127,8 +122,7 @@ const signInSuccess = (isNoPower: boolean | undefined) => {
 			router.push('/');
 		}
 		// 登录成功提示
-		const signInText = t('message.signInText');
-		ElMessage.success(`${currentTimeInfo}，${signInText}`);
+		ElMessage.success(`${currentTimeInfo}，欢迎回来！`);
 		// 添加 loading，防止第一次进入界面时出现短暂空白
 		NextLoading.start();
 	}

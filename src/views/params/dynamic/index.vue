@@ -24,10 +24,6 @@
 							<SvgIcon name="iconfont icon-dongtai" />
 							动态路由传参
 						</el-button>
-						<el-button type="primary" size="default" class="mt15" @click="onChangeI18n">
-							<SvgIcon name="iconfont icon-fuhao-zhongwen" />
-							{{ state.tagsViewNameIsI18n ? '普通的演示' : '国际化演示' }}
-						</el-button>
 					</template>
 				</el-result>
 			</div>
@@ -45,7 +41,6 @@ const router = useRouter();
 const state = reactive<ParamsState>({
 	value: '',
 	tagsViewName: '',
-	tagsViewNameIsI18n: false,
 });
 
 // 跳转到详情
@@ -62,18 +57,5 @@ const onGoDetailsClick = () => {
 		},
 	});
 	state.value = '';
-};
-// 模拟测试内容
-const onChangeI18n = () => {
-	state.tagsViewNameIsI18n = !state.tagsViewNameIsI18n;
-	if (state.tagsViewNameIsI18n) {
-		state.tagsViewName = JSON.stringify({
-			'zh-cn': '我是动态路由',
-			en: 'Im dynamic routing',
-			'zh-tw': '我是動態路由',
-		});
-	} else {
-		state.tagsViewName = '我是动态路由测试tagsViewName(非国际化)';
-	}
 };
 </script>

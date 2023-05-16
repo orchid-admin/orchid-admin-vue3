@@ -19,7 +19,7 @@
 				>
 					<i class="iconfont icon-webicon318 layout-navbars-tagsview-ul-li-iconfont" v-if="isActive(v)"></i>
 					<SvgIcon :name="v.meta.icon" v-if="!isActive(v) && getThemeConfig.isTagsviewIcon" class="pr5" />
-					<span>{{ setTagsViewNameI18n(v) }}</span>
+					<span>{{ setTagsViewName(v) }}</span>
 					<template v-if="isActive(v)">
 						<SvgIcon
 							name="ele-RefreshRight"
@@ -98,9 +98,9 @@ const getThemeConfig = computed(() => {
 	return themeConfig.value;
 });
 // 设置 自定义 tagsView 名称、 自定义 tagsView 名称国际化
-const setTagsViewNameI18n = computed(() => {
+const setTagsViewName = computed(() => {
 	return (v: RouteItem) => {
-		return other.setTagsViewNameI18n(v);
+		return other.setTagsViewName(v);
 	};
 });
 // 设置 tagsView 高亮

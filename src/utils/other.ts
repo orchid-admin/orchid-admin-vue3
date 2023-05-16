@@ -5,7 +5,6 @@ import router from '/@/router/index';
 import pinia from '/@/stores/index';
 import { storeToRefs } from 'pinia';
 import { useThemeConfig } from '/@/stores/themeConfig';
-import { i18n } from '/@/i18n/index';
 import { Local } from '/@/utils/storage';
 import { verifyUrl } from '/@/utils/toolsValidate';
 
@@ -39,7 +38,7 @@ export function useTitle() {
 		if (path === '/login') {
 			webTitle = <string>meta.title;
 		} else {
-			webTitle = setTagsViewNameI18n(router.currentRoute.value);
+			webTitle = setTagsViewName(router.currentRoute.value);
 		}
 		document.title = `${webTitle} - ${globalTitle}` || globalTitle;
 	});
@@ -50,25 +49,10 @@ export function useTitle() {
  * @param params 路由 query、params 中的 tagsViewName
  * @returns 返回当前 tagsViewName 名称
  */
-export function setTagsViewNameI18n(item: any) {
+export function setTagsViewName(item: any) {
 	let tagsViewName: string = '';
-	const { query, params, meta } = item;
-	// 修复tagsViewName匹配到其他含下列单词的路由
-	// https://gitee.com/lyt-top/vue-next-admin/pulls/44/files
-	const pattern = /^\{("(zh-cn|en|zh-tw)":"[^,]+",?){1,3}}$/;
-	if (query?.tagsViewName || params?.tagsViewName) {
-		if (pattern.test(query?.tagsViewName) || pattern.test(params?.tagsViewName)) {
-			// 国际化
-			const urlTagsParams = (query?.tagsViewName && JSON.parse(query?.tagsViewName)) || (params?.tagsViewName && JSON.parse(params?.tagsViewName));
-			tagsViewName = urlTagsParams[i18n.global.locale.value];
-		} else {
-			// 非国际化
-			tagsViewName = query?.tagsViewName || params?.tagsViewName;
-		}
-	} else {
-		// 非自定义 tagsView 名称
-		tagsViewName = i18n.global.t(meta.title);
-	}
+	const { meta } = item;
+	tagsViewName = meta.title;
 	return tagsViewName;
 }
 
@@ -179,7 +163,7 @@ export function handleOpenLink(val: RouteItem) {
  * 统一批量导出
  * @method elSvg 导出全局注册 element plus svg 图标
  * @method useTitle 设置浏览器标题国际化
- * @method setTagsViewNameI18n 设置 自定义 tagsView 名称、 自定义 tagsView 名称国际化
+ * @method setTagsViewName 设置 自定义 tagsView 名称、 自定义 tagsView 名称国际化
  * @method lazyImg 图片懒加载
  * @method globalComponentSize() element plus 全局组件大小
  * @method deepClone 对象深克隆
@@ -194,8 +178,8 @@ const other = {
 	useTitle: () => {
 		useTitle();
 	},
-	setTagsViewNameI18n(route: RouteToFrom) {
-		return setTagsViewNameI18n(route);
+	setTagsViewName(route: RouteToFrom) {
+		return setTagsViewName(route);
 	},
 	lazyImg: (el: string, arr: EmptyArrayType) => {
 		lazyImg(el, arr);

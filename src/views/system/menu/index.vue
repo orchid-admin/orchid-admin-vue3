@@ -21,7 +21,7 @@
 			</div>
 			<el-table
 				:data="state.tableData.data"
-				v-loading="state.tableData.loading"
+				v-loading="state.loading"
 				style="width: 100%"
 				row-key="id"
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
@@ -29,7 +29,7 @@
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.icon" />
-						<span class="ml10">{{ $t(scope.row.title) }}</span>
+						<span class="ml10">{{ scope.row.title }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="菜单类型">
@@ -112,15 +112,9 @@ const menuTypes = [
 ];
 // 定义变量内容
 const state = reactive({
+	loading: true,
 	tableData: {
 		data: [] as MenuTree[],
-		loading: true,
-	},
-	dialog: {
-		isShowDialog: false,
-		type: '',
-		title: '',
-		submitTxt: '',
 	},
 	search: {
 		keyword: '',
@@ -130,20 +124,22 @@ const state = reactive({
 		id: 0,
 		parent_id: 0,
 	},
+	dialog: {
+		isShowDialog: false,
+		type: '',
+		title: '',
+		submitTxt: '',
+	},
 });
 
 // 获取路由数据，真实请从接口获取
 const getTableData = () => {
-	state.tableData.loading = true;
+	state.loading = true;
 	state.dialog.isShowDialog = false;
-	// let searchParams = { keyword: state.search.keyword, menu_types: [] };
-	// if state.search.menu_type {
-	// 	searchParams.menu_types
-	// }
 	getTreeMenu(state.search).then((res) => {
 		state.tableData.data = res;
 		setTimeout(() => {
-			state.tableData.loading = false;
+			state.loading = false;
 		}, 500);
 	});
 };

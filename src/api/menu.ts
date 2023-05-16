@@ -28,7 +28,7 @@ export const getUserMenu = (params?: object) => {
 		params,
 	});
 };
-export const getTreeMenu = (params: MenuSearchRequest) => {
+export const getTreeMenu = (params?: MenuSearchRequest) => {
 	return request<any, MenuTree[]>({
 		url: '/menu',
 		method: 'get',

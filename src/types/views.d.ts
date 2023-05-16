@@ -51,7 +51,6 @@ declare type Demo2State<T = any> = {
 declare type ParamsState = {
 	value: string;
 	tagsViewName: string;
-	tagsViewNameIsI18n: boolean;
 };
 
 /**
