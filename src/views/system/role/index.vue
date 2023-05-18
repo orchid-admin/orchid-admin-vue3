@@ -69,7 +69,7 @@
 <script setup lang="ts" name="systemRole">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { deleteRole, paginateRole } from '/@/api/role';
+import { deleteRole, getRolePaginate } from '/@/api/role';
 import { PaginateResponse, RoleSearchRequest, RoleList } from '/@/types/bindings';
 
 // 引入组件
@@ -107,7 +107,7 @@ const getTableData = () => {
 	if (state.search.status != null && [1, 2].includes(state.search.status)) {
 		params.status = state.search.status == 1;
 	}
-	paginateRole(params).then((res) => {
+	getRolePaginate(params).then((res) => {
 		state.tableData.data = res.data;
 		state.tableData.total = res.total;
 		setTimeout(() => {

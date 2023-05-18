@@ -1,11 +1,18 @@
 import { PaginateResponse, RoleSearchRequest, RoleList, RoleInfo, RoleCreateRequest } from '/@/types/bindings';
 import request from '/@/utils/request';
 
-export const paginateRole = (params?: RoleSearchRequest) => {
+export const getRolePaginate = (params?: RoleSearchRequest) => {
 	return request<any, PaginateResponse<RoleList>>({
 		url: '/role',
 		method: 'get',
 		params,
+	});
+};
+
+export const getRoleAll = () => {
+	return request<any, RoleList[]>({
+		url: '/role/all',
+		method: 'get',
 	});
 };
 

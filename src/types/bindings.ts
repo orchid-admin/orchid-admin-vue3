@@ -634,3 +634,159 @@ export interface DeptInfo {
 	 */
 	sort: number;
 }
+
+/**
+ * 用户-新增
+ */
+export interface UserCreateRequest {
+	/**
+	 * 部门ID
+	 */
+	dept_id?: number;
+	/**
+	 * 描述
+	 */
+	describe?: string;
+	/**
+	 * 邮箱地址
+	 */
+	email?: string;
+	/**
+	 * 到期时间
+	 */
+	expire_time?: string;
+	/**
+	 * 昵称
+	 */
+	nickname: string;
+	/**
+	 * 密码
+	 */
+	password?: string;
+	/**
+	 * 电话号码
+	 */
+	phone?: string;
+	/**
+	 * 角色ID
+	 */
+	role_id?: number;
+	/**
+	 * 性别
+	 */
+	sex: number;
+	/**
+	 * 状态
+	 */
+	status: boolean;
+	/**
+	 * 用户名
+	 */
+	username: string;
+}
+/**
+ * 用户-列表
+ */
+export interface UserList {
+	/**
+	 * 创建时间
+	 */
+	created_at?: string;
+	/**
+	 * 部门ID
+	 */
+	dept_id?: null;
+	/**
+	 * 描述
+	 */
+	describe?: string;
+	/**
+	 * 邮箱
+	 */
+	email?: string;
+	/**
+	 * 到期事假
+	 */
+	expire_time?: null;
+	/**
+	 * 用户ID
+	 */
+	id?: number;
+	/**
+	 * 昵称
+	 */
+	nickname?: string;
+	/**
+	 * 电话号码
+	 */
+	phone?: string;
+	/**
+	 * 角色ID
+	 */
+	role_id?: number;
+	/**
+	 * 性别
+	 */
+	sex?: number;
+	/**
+	 * 状态
+	 */
+	status?: boolean;
+	/**
+	 * 用户名
+	 */
+	username?: string;
+}
+/**
+ * 用户-详情
+ */
+export interface UserInfo {
+	/**
+	 * 创建时间
+	 */
+	created_at: string;
+	/**
+	 * 部门ID
+	 */
+	dept_id: null;
+	/**
+	 * 描述
+	 */
+	describe: string;
+	/**
+	 * 邮箱
+	 */
+	email: string;
+	/**
+	 * 到期时间
+	 */
+	expire_time: null;
+	/**
+	 * 用户ID
+	 */
+	id: number;
+	/**
+	 * 昵称
+	 */
+	nickname: string;
+	/**
+	 * 电话号码
+	 */
+	phone: string;
+	/**
+	 * 角色ID
+	 */
+	role_id: number;
+	/**
+	 * 性别
+	 */
+	sex: number;
+	/**
+	 * 状态
+	 */
+	status: boolean;
+	/**
+	 * 用户名
+	 */
+	username: string;
+}
