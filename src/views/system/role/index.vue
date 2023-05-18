@@ -20,7 +20,7 @@
 					新增角色
 				</el-button>
 			</div>
-			<el-table :data="state.tableData.data" v-loading="state.loading" style="width: 100%">
+			<el-table :data="state.tableData.data" empty-text="暂无数据" v-loading="state.loading" style="width: 100%">
 				<el-table-column prop="id" label="ID" width="60" />
 				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="sign" label="角色标识" show-overflow-tooltip></el-table-column>

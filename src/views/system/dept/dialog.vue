@@ -3,13 +3,20 @@
 		<el-row :gutter="35">
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="上级部门">
-					<el-cascader :options="state.deptData"
-						:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }" placeholder="请选择部门"
-						clearable filterable class="w100" v-model="state.ruleForm.parent_id">
+					<el-cascader
+						:options="state.deptData"
+						:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }"
+						placeholder="请选择部门"
+						clearable
+						filterable
+						class="w100"
+						v-model="state.ruleForm.parent_id"
+					>
 						<template #default="{ node, data }">
 							<span>{{ data.name }}</span>
 							<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
 						</template>
+						<template #empty>暂无数据</template>
 					</el-cascader>
 				</el-form-item>
 			</el-col>
@@ -35,8 +42,7 @@
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 				<el-form-item label="排序">
-					<el-input-number v-model="state.ruleForm.sort" :min="0" :max="999" controls-position="right"
-						placeholder="请输入排序" class="w100" />
+					<el-input-number v-model="state.ruleForm.sort" :min="0" :max="999" controls-position="right" placeholder="请输入排序" class="w100" />
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -46,8 +52,7 @@
 			</el-col>
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="部门描述">
-					<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入部门描述"
-						maxlength="150"></el-input>
+					<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入部门描述" maxlength="150"></el-input>
 				</el-form-item>
 			</el-col>
 		</el-row>
@@ -85,7 +90,7 @@ const onSubmit = () => {
 		updateDept(props.id, state.ruleForm).then(() => {
 			ElMessage.success('更新成功');
 			emit('refresh');
-		})
+		});
 	} else {
 		createDept(state.ruleForm).then(() => {
 			ElMessage.success('新增成功');

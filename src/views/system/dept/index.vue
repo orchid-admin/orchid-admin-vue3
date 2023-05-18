@@ -2,8 +2,7 @@
 	<div class="system-dept-container layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto">
 			<div class="system-dept-search mb15">
-				<el-input v-model="state.search.keyword" size="default" placeholder="请输入部门名称" style="max-width: 180px">
-				</el-input>
+				<el-input v-model="state.search.keyword" size="default" placeholder="请输入部门名称" style="max-width: 180px"> </el-input>
 				<el-select v-model="state.search.status" class="m-2" placeholder="状态" size="default" clearable>
 					<el-option label="开启" :value="1" />
 					<el-option label="关闭" :value="2" />
@@ -21,8 +20,15 @@
 					新增部门
 				</el-button>
 			</div>
-			<el-table :data="state.tableData.data" v-loading="state.loading" style="width: 100%" row-key="id"
-				default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
+			<el-table
+				:data="state.tableData.data"
+				empty-text="暂无数据"
+				v-loading="state.loading"
+				style="width: 100%"
+				row-key="id"
+				default-expand-all
+				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
+			>
 				<el-table-column prop="id" label="ID" show-overflow-tooltip> </el-table-column>
 				<el-table-column prop="name" label="部门名称" show-overflow-tooltip> </el-table-column>
 				<el-table-column prop="describe" label="部门描述" show-overflow-tooltip></el-table-column>
@@ -56,7 +62,6 @@
 				</span>
 			</template>
 		</el-dialog>
-
 	</div>
 </template>
 
@@ -64,7 +69,7 @@
 import { defineAsyncComponent, ref, reactive, onMounted } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { deleteDept, getTreeDept } from '/@/api/dept';
-import { DeptTree } from '/@/types/bindings';
+import { DeptSearchRequest, DeptTree } from '/@/types/bindings';
 
 // 引入组件
 const DeptDialog = defineAsyncComponent(() => import('/@/views/system/dept/dialog.vue'));
@@ -82,7 +87,7 @@ const state = reactive({
 	},
 	row: {
 		id: 0,
-		parent_id: 0
+		parent_id: 0,
 	},
 	dialog: {
 		isShowDialog: false,
@@ -96,12 +101,16 @@ const state = reactive({
 const getTableData = () => {
 	state.loading = true;
 	state.dialog.isShowDialog = false;
-	getTreeDept().then((res) => {
+	let params = { keyword: state.search.keyword } as DeptSearchRequest;
+	if (state.search.status != null && [1, 2].includes(state.search.status)) {
+		params.status = state.search.status == 1;
+	}
+	getTreeDept(params).then((res) => {
 		state.tableData.data = res;
 		setTimeout(() => {
 			state.loading = false;
 		}, 500);
-	})
+	});
 };
 const onSearchQuery = () => {
 	getTableData();
@@ -144,7 +153,7 @@ const onTabelRowDel = (row: DeptTree) => {
 				ElMessage.success('删除成功');
 			});
 		})
-		.catch(() => { });
+		.catch(() => {});
 };
 // 页面加载时
 onMounted(() => {

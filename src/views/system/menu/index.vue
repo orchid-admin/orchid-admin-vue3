@@ -21,6 +21,7 @@
 			</div>
 			<el-table
 				:data="state.tableData.data"
+				empty-text="暂无数据"
 				v-loading="state.loading"
 				style="width: 100%"
 				row-key="id"

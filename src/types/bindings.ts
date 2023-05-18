@@ -402,7 +402,7 @@ export interface PaginateResponse<T> {
 	total: number;
 }
 export interface RoleSearchRequest extends PaginateRequest {
-	keyword: string;
+	keyword?: string;
 	status?: boolean;
 }
 /**
@@ -542,6 +542,19 @@ export interface DeptTree {
 	 * 状态
 	 */
 	status: boolean;
+}
+/**
+ * 部门-搜索
+ */
+export interface DeptSearchRequest {
+	/**
+	 * 关键字
+	 */
+	keyword?: string;
+	/**
+	 * 状态
+	 */
+	status?: boolean;
 }
 /**
  * 部门-新增
