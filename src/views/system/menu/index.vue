@@ -162,7 +162,7 @@ const onCancel = () => {
 	state.dialog.isShowDialog = false;
 };
 const onSubmit = () => {
-	menuDialogRef.value.onSubmit();
+	menuDialogRef.value.onSubmit(menuDialogRef.value.menuDialogFormRef);
 };
 const onSearchQuery = () => {
 	getTableData();

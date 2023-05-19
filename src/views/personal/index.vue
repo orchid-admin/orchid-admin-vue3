@@ -61,7 +61,7 @@
 			</el-col>
 
 			<!-- 营销推荐 -->
-			<el-col :span="24">
+			<!-- <el-col :span="24">
 				<el-card shadow="hover" class="mt15" header="营销推荐">
 					<el-row :gutter="15" class="personal-recommend-row">
 						<el-col :sm="6" v-for="(v, k) in state.recommendList" :key="k" class="personal-recommend-col">
@@ -75,7 +75,7 @@
 						</el-col>
 					</el-row>
 				</el-card>
-			</el-col>
+			</el-col> -->
 
 			<!-- 更新信息 -->
 			<el-col :span="24">

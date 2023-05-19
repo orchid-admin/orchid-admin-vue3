@@ -1,5 +1,5 @@
 <template>
-	<el-form ref="menuDialogFormRef" :model="state.ruleForm" size="default" label-width="80px">
+	<el-form ref="menuDialogFormRef" :rules="rules" :model="state.ruleForm" size="default" label-width="80px">
 		<el-row :gutter="35">
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="上级菜单" prop="parent_id">
@@ -146,7 +146,7 @@
 <script setup lang="ts" name="systemMenuDialog">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { createMenu, updateMenu, getMenuInfo } from '/@/api/menu';
-import { ElMessage } from 'element-plus';
+import { ElMessage, FormInstance, FormRules } from 'element-plus';
 import { setBackEndControlRefreshRoutes } from '/@/router/backEnd';
 import { MenuCreateRequest } from '/@/types/bindings';
 
@@ -178,6 +178,29 @@ const state = reactive({
 	} as MenuCreateRequest,
 	menuData: [] as RouteItems, // 上级菜单数据
 });
+const rules = reactive<FormRules>({
+	title: [
+		{
+			required: true,
+			message: '请输入菜单名称',
+			trigger: 'blur',
+		},
+	],
+	type: [
+		{
+			required: true,
+			message: '菜单类型不能为空',
+			trigger: 'change',
+		},
+	],
+	sort: [
+		{
+			required: true,
+			message: '排序不能为空',
+			trigger: 'blur',
+		},
+	],
+});
 
 // 获取 pinia 中的路由
 const getMenuData = (routes: RouteItems) => {
@@ -190,20 +213,23 @@ const getMenuData = (routes: RouteItems) => {
 };
 
 // 提交
-const onSubmit = () => {
-	if (props.id) {
-		updateMenu(props.id, state.ruleForm).then(() => {
-			ElMessage.success('更新成功');
-			emit('refresh');
-			setBackEndControlRefreshRoutes(); // 刷新菜单，未进行后端接口测试
-		});
-	} else {
-		createMenu(state.ruleForm).then(() => {
-			ElMessage.success('新增成功');
-			emit('refresh');
-			setBackEndControlRefreshRoutes(); // 刷新菜单，未进行后端接口测试
-		});
-	}
+const onSubmit = async (formEl: FormInstance | undefined) => {
+	if (!formEl) return;
+	await formEl.validate(async (valid) => {
+		if (valid) {
+			if (props.id) {
+				await updateMenu(props.id, state.ruleForm);
+				ElMessage.success('更新成功');
+				emit('refresh');
+				setBackEndControlRefreshRoutes(); // 刷新菜单，未进行后端接口测试
+			} else {
+				await createMenu(state.ruleForm);
+				ElMessage.success('新增成功');
+				emit('refresh');
+				setBackEndControlRefreshRoutes(); // 刷新菜单，未进行后端接口测试
+			}
+		}
+	});
 };
 // 页面加载时
 onMounted(() => {
@@ -235,5 +261,5 @@ const props = defineProps({
 		required: true,
 	},
 });
-defineExpose({ onSubmit });
+defineExpose({ onSubmit, menuDialogFormRef });
 </script>

@@ -17,7 +17,7 @@ export const updateMenu = (id: Number, data?: Object) => {
 };
 export const deleteMenu = (id: number) => {
 	return request<any, any>({
-		url: '/menu' + id,
+		url: '/menu/' + id,
 		method: 'delete',
 	});
 };
