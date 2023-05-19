@@ -139,9 +139,7 @@ const getTableData = () => {
 	state.dialog.isShowDialog = false;
 	getTreeMenu(state.search).then((res) => {
 		state.tableData.data = res;
-		setTimeout(() => {
-			state.loading = false;
-		}, 500);
+		state.loading = false;
 	});
 };
 const dialogSuccess = () => {

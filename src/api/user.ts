@@ -10,7 +10,7 @@ export const getUserPermission = (params?: object) => {
 };
 export const getUserPaginate = (params?: Object) => {
 	return request<any, PaginateResponse<UserList>>({
-		url: '/user/get_user_permission',
+		url: '/user',
 		method: 'get',
 		params,
 	});
@@ -38,6 +38,6 @@ export const updateUser = (id: number, data: UserCreateRequest) => {
 export const deleteUser = (id: number) => {
 	return request<any, any>({
 		url: '/user/' + id,
-		method: 'put',
+		method: 'delete',
 	});
 };

@@ -110,9 +110,7 @@ const getTableData = () => {
 	getRolePaginate(params).then((res) => {
 		state.tableData.data = res.data;
 		state.tableData.total = res.total;
-		setTimeout(() => {
-			state.loading = false;
-		}, 500);
+		state.loading = false;
 	});
 };
 const onSearchQuery = () => {

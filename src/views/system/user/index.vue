@@ -11,7 +11,6 @@
 					:options="state.depts"
 					:props="deptsDefaultProps"
 					:show-all-levels="false"
-					size="default"
 					placeholder="请选择部门"
 					clearable
 				/>
@@ -29,11 +28,15 @@
 				</el-button>
 			</div>
 			<el-table :data="state.tableData.data" v-loading="state.loading" style="width: 100%">
-				<el-table-column type="index" label="序号" width="60" />
-				<el-table-column prop="userName" label="账户名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="userNickname" label="用户昵称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="roleSign" label="关联角色" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="department" label="部门" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="id" label="ID" width="60" />
+				<el-table-column prop="username" label="账户名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="nickname" label="用户昵称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="role.name" label="关联角色" show-overflow-tooltip>
+					<template #default="scope">
+						<div v-if="scope.role">{{ scope.role.name }}</div>
+					</template>
+				</el-table-column>
+				<el-table-column prop="dept.name" label="部门" show-overflow-tooltip> </el-table-column>
 				<el-table-column prop="phone" label="手机号" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="email" label="邮箱" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="status" label="用户状态" show-overflow-tooltip>
@@ -43,11 +46,11 @@
 					</template>
 				</el-table-column>
 				<el-table-column prop="describe" label="用户描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="createTime" label="创建时间" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="created_at" label="创建时间" width="180" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100">
 					<template #default="scope">
-						<el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary" @click="onOpenEditUser(scope.row)">修改</el-button>
-						<el-button :disabled="scope.row.userName === 'admin'" size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button :disabled="!scope.row._can_edit" size="small" text type="primary" @click="onOpenEditUser(scope.row)">修改</el-button>
+						<el-button :disabled="!scope.row._can_delete" size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -81,8 +84,9 @@
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
 import { getTreeDept } from '/@/api/dept';
-import { DeptTree, RoleList } from '/@/types/bindings';
+import { DeptTree, RoleList, UserList, UserSearchRequest } from '/@/types/bindings';
 import { getRoleAll } from '/@/api/role';
+import { deleteUser, getUserPaginate } from '/@/api/user';
 
 // 引入组件
 const UserDialog = defineAsyncComponent(() => import('/@/views/system/user/dialog.vue'));
@@ -93,17 +97,18 @@ const state = reactive({
 	depts: [] as DeptTree[],
 	roles: [] as RoleList[],
 	tableData: {
-		data: [],
+		data: [] as UserList[],
 		total: 0,
 	},
 	loading: false,
 	search: {
 		keyword: '',
 		role_id: null,
-		dept_id: 0,
+		dept_id: null,
+		status: null,
 		page: 1,
 		limit: 10,
-	},
+	} as UserSearchRequest,
 	row: {
 		id: 0,
 	},
@@ -117,34 +122,20 @@ const state = reactive({
 const deptsDefaultProps = {
 	children: 'children',
 	label: 'name',
+	value: 'id',
+	emitPath: false,
 	checkStrictly: true,
 };
 
 // 初始化表格数据
 const getTableData = () => {
 	state.loading = true;
-	const data = [];
-	for (let i = 0; i < 2; i++) {
-		data.push({
-			userName: i === 0 ? 'admin' : 'test',
-			userNickname: i === 0 ? '我是管理员' : '我是普通用户',
-			roleSign: i === 0 ? 'admin' : 'common',
-			department: i === 0 ? ['vueNextAdmin', 'IT外包服务'] : ['vueNextAdmin', '资本控股'],
-			phone: '12345678910',
-			email: 'vueNextAdmin@123.com',
-			sex: '女',
-			password: '123456',
-			overdueTime: new Date(),
-			status: true,
-			describe: i === 0 ? '不可删除' : '测试用户',
-			createTime: new Date().toLocaleString(),
-		});
-	}
-	state.tableData.data = data;
-	state.tableData.total = state.tableData.data.length;
-	setTimeout(() => {
+	state.dialog.isShowDialog = false;
+	getUserPaginate(state.search).then((res) => {
+		state.tableData.data = res.data;
+		state.tableData.total = res.total;
 		state.loading = false;
-	}, 500);
+	});
 };
 const onSearchQuery = () => {
 	getTableData();
@@ -164,20 +155,22 @@ const onOpenAddUser = () => {
 	state.row.id = 0;
 };
 // 打开修改用户弹窗
-const onOpenEditUser = (row: RowUserType) => {
+const onOpenEditUser = (row: UserList) => {
 	state.dialog.isShowDialog = true;
 	state.row.id = row.id;
 };
 // 删除用户
-const onRowDel = (row: RowUserType) => {
-	ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.userName}”，是否继续?`, '提示', {
+const onRowDel = (row: UserList) => {
+	ElMessageBox.confirm(`此操作将永久删除账户名称：“${row.username}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
 		.then(() => {
-			getTableData();
-			ElMessage.success('删除成功');
+			deleteUser(row.id).then(() => {
+				getTableData();
+				ElMessage.success('删除成功');
+			});
 		})
 		.catch(() => {});
 };

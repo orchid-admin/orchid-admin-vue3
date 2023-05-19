@@ -1,3 +1,37 @@
+interface DataPower {
+	/**
+	 * 是否可删除
+	 */
+	_can_delete: boolean;
+	/**
+	 * 是否可编辑
+	 */
+	_can_edit: boolean;
+}
+/**
+ * 分页请求
+ */
+interface PaginateRequest {
+	/**
+	 * 当前页数
+	 */
+	page: number;
+	/**
+	 * 每页显示数量
+	 */
+	limit: number;
+}
+/**
+ * 分页响应
+ */
+export interface PaginateResponse<T> {
+	data: T[];
+	/**
+	 * 数据总条数
+	 */
+	total: number;
+}
+
 export interface GetCaptchaReponse {
 	/**
 	 * 验证码图片base64
@@ -72,54 +106,54 @@ export interface UserMenuTree {
 	/**
 	 * 子级
 	 */
-	children?: Array<UserMenuTree[]>;
+	children: Array<UserMenuTree[]>;
 	/**
 	 * 内嵌地址
 	 */
-	iframe?: string;
+	iframe: string;
 	/**
 	 * 外链地址
 	 */
-	link?: string;
+	link: string;
 	/**
 	 * 重定向地址
 	 */
-	redirect?: string;
+	redirect: string;
 	/**
 	 * 路由组件地址
 	 */
-	component?: string;
+	component: string;
 	/**
 	 * 路由名称
 	 */
-	name?: string;
+	name: string;
 	/**
 	 * 路径
 	 */
-	path?: string;
+	path: string;
 	meta: UserMenuMeta;
 }
 interface UserMenuMeta {
 	/**
 	 * 菜单名称
 	 */
-	title?: string;
+	title: string;
 	/**
 	 * 图标
 	 */
-	icon?: string;
+	icon: string;
 	/**
 	 * 是否固定
 	 */
-	isAffix?: boolean;
+	isAffix: boolean;
 	/**
 	 * 是否隐藏
 	 */
-	isHide?: boolean;
+	isHide: boolean;
 	/**
 	 * 是否keep-alive
 	 */
-	isKeepAlive?: boolean;
+	isKeepAlive: boolean;
 }
 /**
  * 菜单-搜索
@@ -153,7 +187,7 @@ export interface MenuCreateRequest {
 	/**
 	 * 图标
 	 */
-	icon?: string;
+	icon: string;
 	/**
 	 * 内联地址
 	 */
@@ -214,84 +248,84 @@ export interface MenuTree {
 	/**
 	 * 接口请求方法
 	 */
-	api_method?: string;
+	api_method: string;
 	/**
 	 * 接口地址
 	 */
-	api_url?: string;
+	api_url: string;
 	/**
 	 * 按钮权限
 	 */
-	btn_auth?: string;
-	children?: Array<MenuTree[]>;
+	btn_auth: string;
+	children: Array<MenuTree[]>;
 	/**
 	 * 创建时间
 	 */
-	created_at?: string;
+	created_at: string;
 	/**
 	 * 图标
 	 */
-	icon?: string;
+	icon: string;
 	/**
 	 * 菜单ID
 	 */
-	id?: number;
+	id: number;
 	/**
 	 * 内联地址
 	 */
-	iframe?: string;
+	iframe: string;
 	/**
 	 * 是否固定
 	 */
-	is_affix?: boolean;
+	is_affix: boolean;
 	/**
 	 * 是否隐藏
 	 */
-	is_hide?: boolean;
+	is_hide: boolean;
 	/**
 	 * 是否启用keepAlive
 	 */
-	is_keep_alive?: boolean;
+	is_keep_alive: boolean;
 	/**
 	 * 链接地址
 	 */
-	link?: string;
+	link: string;
 	/**
 	 * 父级ID
 	 */
-	parent_id?: number;
+	parent_id: number;
 	/**
 	 * 重定向地址
 	 */
-	redirect?: string;
+	redirect: string;
 	/**
 	 * 前端路由组件路径
 	 */
-	router_component?: string;
+	router_component: string;
 	/**
 	 * 前端路由名称
 	 */
-	router_name?: string;
+	router_name: string;
 	/**
 	 * 前端路由路径
 	 */
-	router_path?: string;
+	router_path: string;
 	/**
 	 * 排序
 	 */
-	sort?: number;
+	sort: number;
 	/**
 	 * 菜单名称
 	 */
-	title?: string;
+	title: string;
 	/**
 	 * 菜单类型，1.菜单，2.重定向，3.外链，4.嵌套，5.按钮权限，6.接口权限
 	 */
-	type?: number;
+	type: number;
 	/**
 	 * 更新时间
 	 */
-	updated_time?: string;
+	updated_time: string;
 }
 /**
  * 菜单-详情
@@ -378,32 +412,13 @@ export interface MenuInfo {
 	 */
 	updated_time: string;
 }
+
 /**
- * 分页请求
+ * 角色-搜索
  */
-export interface PaginateRequest {
-	/**
-	 * 当前页数
-	 */
-	page: number;
-	/**
-	 * 每页显示数量
-	 */
-	limit: number;
-}
-/**
- * 分页响应
- */
-export interface PaginateResponse<T> {
-	data: T[];
-	/**
-	 * 数据总条数
-	 */
-	total: number;
-}
 export interface RoleSearchRequest extends PaginateRequest {
-	keyword?: string;
-	status?: boolean;
+	keyword: string;
+	status: boolean | null;
 }
 /**
  * 角色-新增
@@ -434,22 +449,15 @@ export interface RoleCreateRequest {
 	 */
 	status: boolean;
 }
+
 /**
  * 角色-列表
  */
-export interface RoleList {
-	/**
-	 * 是否可删除
-	 */
-	_can_delete?: boolean;
-	/**
-	 * 是否可编辑
-	 */
-	_can_edit?: boolean;
+export interface RoleList extends DataPower {
 	/**
 	 * 角色描述
 	 */
-	describe?: string;
+	describe: string;
 	/**
 	 * 角色ID
 	 */
@@ -457,15 +465,15 @@ export interface RoleList {
 	/**
 	 * 角色名称
 	 */
-	name?: string;
+	name: string;
 	/**
 	 * 角色标识
 	 */
-	sign?: string;
+	sign: string;
 	/**
 	 * 角色状态
 	 */
-	status?: boolean;
+	status: boolean;
 }
 
 /**
@@ -550,11 +558,11 @@ export interface DeptSearchRequest {
 	/**
 	 * 关键字
 	 */
-	keyword?: string;
+	keyword: string;
 	/**
 	 * 状态
 	 */
-	status?: boolean;
+	status: boolean | null;
 }
 /**
  * 部门-新增
@@ -563,7 +571,7 @@ export interface DeptCreateRequest {
 	/**
 	 * 部门描述
 	 */
-	describe?: string;
+	describe: string;
 	/**
 	 * 部门名称
 	 */
@@ -575,15 +583,15 @@ export interface DeptCreateRequest {
 	/**
 	 * 部门负责人邮箱
 	 */
-	person_email?: string;
+	person_email: string;
 	/**
 	 * 部门负责人姓名
 	 */
-	person_name?: string;
+	person_name: string;
 	/**
 	 * 部门负责人电话
 	 */
-	person_phone?: string;
+	person_phone: string;
 	/**
 	 * 排序
 	 */
@@ -636,25 +644,46 @@ export interface DeptInfo {
 }
 
 /**
+ * 用户-搜索
+ */
+export interface UserSearchRequest extends PaginateRequest {
+	/**
+	 * 部门ID
+	 */
+	dept_id: number | null;
+	/**
+	 * 关键字
+	 */
+	keyword: string;
+	/**
+	 * 角色ID
+	 */
+	role_id: number | null;
+	/**
+	 * 状态
+	 */
+	status: boolean | null;
+}
+/**
  * 用户-新增
  */
 export interface UserCreateRequest {
 	/**
 	 * 部门ID
 	 */
-	dept_id?: number;
+	dept_id: number | null;
 	/**
 	 * 描述
 	 */
-	describe?: string;
+	describe: string;
 	/**
 	 * 邮箱地址
 	 */
-	email?: string;
+	email: string;
 	/**
 	 * 到期时间
 	 */
-	expire_time?: string;
+	expire_time: string;
 	/**
 	 * 昵称
 	 */
@@ -662,19 +691,19 @@ export interface UserCreateRequest {
 	/**
 	 * 密码
 	 */
-	password?: string;
+	password: string | null;
 	/**
 	 * 电话号码
 	 */
-	phone?: string;
+	phone: string;
 	/**
 	 * 角色ID
 	 */
-	role_id?: number;
+	role_id: number | null;
 	/**
 	 * 性别
 	 */
-	sex: number;
+	sex: number | null;
 	/**
 	 * 状态
 	 */
@@ -691,64 +720,12 @@ export interface UserList {
 	/**
 	 * 创建时间
 	 */
-	created_at?: string;
-	/**
-	 * 部门ID
-	 */
-	dept_id?: null;
-	/**
-	 * 描述
-	 */
-	describe?: string;
-	/**
-	 * 邮箱
-	 */
-	email?: string;
-	/**
-	 * 到期事假
-	 */
-	expire_time?: null;
-	/**
-	 * 用户ID
-	 */
-	id?: number;
-	/**
-	 * 昵称
-	 */
-	nickname?: string;
-	/**
-	 * 电话号码
-	 */
-	phone?: string;
-	/**
-	 * 角色ID
-	 */
-	role_id?: number;
-	/**
-	 * 性别
-	 */
-	sex?: number;
-	/**
-	 * 状态
-	 */
-	status?: boolean;
-	/**
-	 * 用户名
-	 */
-	username?: string;
-}
-/**
- * 用户-详情
- */
-export interface UserInfo {
-	/**
-	 * 创建时间
-	 */
 	created_at: string;
 	/**
 	 * 部门ID
 	 */
-	dept_id: null;
+	dept_id: number | null;
+	dept: DeptInfo | null;
 	/**
 	 * 描述
 	 */
@@ -758,9 +735,9 @@ export interface UserInfo {
 	 */
 	email: string;
 	/**
-	 * 到期时间
+	 * 到期事假
 	 */
-	expire_time: null;
+	expire_time: string | null;
 	/**
 	 * 用户ID
 	 */
@@ -776,7 +753,61 @@ export interface UserInfo {
 	/**
 	 * 角色ID
 	 */
-	role_id: number;
+	role_id: number | null;
+	role: RoleInfo | null;
+	/**
+	 * 性别
+	 */
+	sex: number | null;
+	/**
+	 * 状态
+	 */
+	status: boolean;
+	/**
+	 * 用户名
+	 */
+	username: string;
+}
+/**
+ * 用户-详情
+ */
+export interface UserInfo extends DataPower {
+	/**
+	 * 创建时间
+	 */
+	created_at: string;
+	/**
+	 * 部门ID
+	 */
+	dept_id: number | null;
+	/**
+	 * 描述
+	 */
+	describe: string;
+	/**
+	 * 邮箱
+	 */
+	email: string;
+	/**
+	 * 到期时间
+	 */
+	expire_time: string;
+	/**
+	 * 用户ID
+	 */
+	id: number;
+	/**
+	 * 昵称
+	 */
+	nickname: string;
+	/**
+	 * 电话号码
+	 */
+	phone: string;
+	/**
+	 * 角色ID
+	 */
+	role_id: number | null;
 	/**
 	 * 性别
 	 */
@@ -789,4 +820,8 @@ export interface UserInfo {
 	 * 用户名
 	 */
 	username: string;
+	/**
+	 * 密码
+	 */
+	password: string | null;
 }
