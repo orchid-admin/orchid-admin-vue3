@@ -87,10 +87,6 @@ export interface UserPermission {
 	 */
 	photo: string;
 	/**
-	 * 角色标识
-	 */
-	roles: string[];
-	/**
 	 * 到期实际
 	 */
 	time: number;

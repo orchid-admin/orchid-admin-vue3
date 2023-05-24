@@ -6,7 +6,6 @@
 declare interface UserInfos<T = any> {
 	authBtnList: string[];
 	photo: string;
-	roles: string[];
 	time: number;
 	userName: string;
 	[key: string]: T;

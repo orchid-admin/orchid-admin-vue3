@@ -109,7 +109,7 @@ const state = reactive({
 		describe: '', // 用户描述
 	} as UserCreateRequest,
 	depts: [] as DeptTree[], // 部门数据
-	roles: [] as RoleList[], // 部门数据
+	roles: [] as RoleList[], // 角色数据
 });
 
 // 提交
