@@ -69,7 +69,7 @@
 			</el-pagination>
 		</el-card>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
-			<UserDialog ref="userDialogRef" @refresh="dialogSuccess" :id="state.row.id" />
+			<UserDialog ref="userDialogRef" @success="onSuccess" :id="state.row.id" />
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button size="default" @click="onCancel">取 消</el-button>
@@ -140,7 +140,7 @@ const getTableData = () => {
 const onSearchQuery = () => {
 	getTableData();
 };
-const dialogSuccess = () => {
+const onSuccess = () => {
 	getTableData();
 };
 const onCancel = () => {

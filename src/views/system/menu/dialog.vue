@@ -33,7 +33,7 @@
 				<el-form-item label="菜单类型" prop="type">
 					<el-radio-group v-model="state.ruleForm.type">
 						<el-radio :label="1">菜单</el-radio>
-						<el-radio :label="2">目录</el-radio>
+						<el-radio :label="2">重定向/目录</el-radio>
 						<el-radio :label="3">外链</el-radio>
 						<el-radio :label="4">内嵌</el-radio>
 						<el-radio :label="5">权限</el-radio>
@@ -52,7 +52,7 @@
 			<template v-if="[1].includes(state.ruleForm.type)">
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="组件路径" prop="router_component">
-						<el-input v-model="state.ruleForm.router_component" placeholder="组件路径" clearable></el-input>
+						<el-input v-model="state.ruleForm.router_component" placeholder="路由组件路径" clearable></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
@@ -91,11 +91,6 @@
 			</template>
 			<template v-if="state.ruleForm.type === 6">
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="接口地址" prop="api_url">
-						<el-input v-model="state.ruleForm.api_url" placeholder="请输入接口地址" clearable></el-input>
-					</el-form-item>
-				</el-col>
-				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="请求方法" prop="api_method">
 						<el-select v-model="state.ruleForm.api_method" placeholder="请选择请求方法" clearable>
 							<el-option
@@ -105,6 +100,11 @@
 								:value="item"
 							/>
 						</el-select>
+					</el-form-item>
+				</el-col>
+				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
+					<el-form-item label="接口地址" prop="api_url">
+						<el-input v-model="state.ruleForm.api_url" placeholder="请输入接口地址" clearable></el-input>
 					</el-form-item>
 				</el-col>
 			</template>
@@ -183,21 +183,66 @@ const rules = reactive<FormRules>({
 		{
 			required: true,
 			message: '请输入菜单名称',
-			trigger: 'blur',
 		},
 	],
 	type: [
 		{
 			required: true,
 			message: '菜单类型不能为空',
-			trigger: 'change',
 		},
 	],
 	sort: [
 		{
 			required: true,
 			message: '排序不能为空',
-			trigger: 'blur',
+		},
+	],
+	router_name: [
+		{
+			required: true,
+			message: '路由名称不能为空',
+		},
+	],
+	router_component: [
+		{
+			required: true,
+			message: '路由组件不能为空',
+		},
+	],
+	router_path: [
+		{
+			required: true,
+			message: '路由路径不能为空',
+		},
+	],
+	link: [
+		{
+			required: true,
+			message: '外链地址不能为空',
+		},
+	],
+	iframe: [
+		{
+			required: true,
+			message: '内嵌地址不能为空',
+		},
+	],
+	btn_auth: [
+		{
+			required: true,
+			message: '按钮权限不能为空',
+		},
+	],
+	api_method: [
+		{
+			required: true,
+			message: '请选择接口请求方法',
+		},
+	],
+	api_url: [
+		{
+			required: true,
+			message: '接口地址不能为空',
 		},
 	],
 });
@@ -220,24 +265,22 @@ const onSubmit = async (formEl: FormInstance | undefined) => {
 			if (props.id) {
 				await updateMenu(props.id, state.ruleForm);
 				ElMessage.success('更新成功');
-				emit('refresh');
+				emit('success');
 				setBackEndControlRefreshRoutes(); // 刷新菜单，未进行后端接口测试
 			} else {
 				await createMenu(state.ruleForm);
 				ElMessage.success('新增成功');
-				emit('refresh');
+				emit('success');
 				setBackEndControlRefreshRoutes(); // 刷新菜单，未进行后端接口测试
 			}
 		}
 	});
 };
 // 页面加载时
-onMounted(() => {
+onMounted(async () => {
 	state.menuData = getMenuData(props.menuData);
 	if (props.id) {
-		getMenuInfo(props.id).then((res) => {
-			state.ruleForm = res;
-		});
+		state.ruleForm = await getMenuInfo(props.id);
 	}
 	if (props.parent_id) {
 		state.ruleForm.parent_id = props.parent_id;
@@ -245,7 +288,7 @@ onMounted(() => {
 });
 
 // 定义子组件向父组件传值/事件
-const emit = defineEmits(['refresh']);
+const emit = defineEmits(['success']);
 
 const props = defineProps({
 	menuData: {

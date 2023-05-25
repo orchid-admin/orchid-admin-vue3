@@ -90,7 +90,7 @@ import { UserCreateRequest } from '/@/types/bindings';
 import { ElMessage } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
-const emit = defineEmits(['refresh']);
+const emit = defineEmits(['success']);
 
 // 定义变量内容
 const userDialogFormRef = ref();
@@ -130,12 +130,12 @@ const onSubmit = () => {
 	if (props.id) {
 		updateUser(props.id, params).then(() => {
 			ElMessage.success('更新成功');
-			emit('refresh');
+			emit('success');
 		});
 	} else {
 		createUser(params).then(() => {
 			ElMessage.success('新增成功');
-			emit('refresh');
+			emit('success');
 		});
 	}
 };

@@ -30,7 +30,7 @@
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.icon" />
-						<span class="ml10">{{ scope.row.title }}</span>
+						<span class="ml10">[{{ scope.row.id }}]{{ scope.row.title }}</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="菜单类型">
@@ -40,7 +40,7 @@
 						<el-text size="small" type="success" v-if="scope.row.type == 3">外链</el-text>
 						<el-text size="small" type="success" v-if="scope.row.type == 4">内嵌</el-text>
 						<el-text size="small" type="success" v-if="scope.row.type == 5">权限</el-text>
-						<el-text size="small" type="success" v-if="scope.row.type == 5">API接口</el-text>
+						<el-text size="small" type="success" v-if="scope.row.type == 6">API接口</el-text>
 					</template>
 				</el-table-column>
 				<el-table-column prop="router_path" label="路由路径" show-overflow-tooltip></el-table-column>
@@ -56,7 +56,9 @@
 				</el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
 					<template #default="scope">
-						<el-button size="small" text type="primary" @click="onAddChildrenMenu(scope.row.id)">新增</el-button>
+						<el-button size="small" text type="primary" v-if="scope.row.type == 1 || scope.row.type == 2" @click="onAddChildrenMenu(scope.row.id)"
+							>新增</el-button
+						>
 						<el-button size="small" text type="primary" @click="onOpenEditMenu(scope.row)">修改</el-button>
 						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
 					</template>
@@ -64,7 +66,7 @@
 			</el-table>
 		</el-card>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
-			<MenuDialog ref="menuDialogRef" @refresh="dialogSuccess" :menuData="state.tableData.data" :id="state.row.id" :parent_id="state.row.parent_id" />
+			<MenuDialog ref="menuDialogRef" @success="onSuccess" :menuData="state.tableData.data" :id="state.row.id" :parent_id="state.row.parent_id" />
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button size="default" @click="onCancel">取 消</el-button>
@@ -134,15 +136,13 @@ const state = reactive({
 });
 
 // 获取路由数据，真实请从接口获取
-const getTableData = () => {
+const getTableData = async () => {
 	state.loading = true;
 	state.dialog.isShowDialog = false;
-	getTreeMenu(state.search).then((res) => {
-		state.tableData.data = res;
-		state.loading = false;
-	});
+	state.tableData.data = await getTreeMenu(state.search);
+	state.loading = false;
 };
-const dialogSuccess = () => {
+const onSuccess = () => {
 	getTableData();
 	setBackEndControlRefreshRoutes();
 };
@@ -181,7 +181,7 @@ const onTabelRowDel = (row: MenuInfo) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
-		.then(async () => {
+		.then(() => {
 			deleteMenu(row.id)
 				.then(async () => {
 					ElMessage.success('删除成功');

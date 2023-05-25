@@ -54,7 +54,7 @@
 			</el-table>
 		</el-card>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
-			<DeptDialog ref="deptDialogRef" @refresh="dialogSuccess" :id="state.row.id" :parent_id="state.row.parent_id" />
+			<DeptDialog ref="deptDialogRef" @success="onSuccess" :id="state.row.id" :parent_id="state.row.parent_id" />
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button size="default" @click="onCancel">取 消</el-button>
@@ -98,22 +98,20 @@ const state = reactive({
 });
 
 // 初始化表格数据
-const getTableData = () => {
+const getTableData = async () => {
 	state.loading = true;
 	state.dialog.isShowDialog = false;
 	let params = { keyword: state.search.keyword } as DeptSearchRequest;
 	if (state.search.status != null && [1, 2].includes(state.search.status)) {
 		params.status = state.search.status == 1;
 	}
-	getTreeDept(params).then((res) => {
-		state.tableData.data = res;
-		state.loading = false;
-	});
+	state.tableData.data = await getTreeDept(params);
+	state.loading = false;
 };
 const onSearchQuery = () => {
 	getTableData();
 };
-const dialogSuccess = () => {
+const onSuccess = () => {
 	getTableData();
 };
 const onCancel = () => {
@@ -145,11 +143,10 @@ const onTabelRowDel = (row: DeptTree) => {
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
-		.then(() => {
-			deleteDept(row.id).then(() => {
-				getTableData();
-				ElMessage.success('删除成功');
-			});
+		.then(async () => {
+			await deleteDept(row.id);
+			getTableData();
+			ElMessage.success('删除成功');
 		})
 		.catch(() => {});
 };

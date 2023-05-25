@@ -66,7 +66,7 @@ import { createDept, getDeptInfo, getTreeDept, updateDept } from '/@/api/dept';
 import { ElMessage } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
-const emit = defineEmits(['refresh']);
+const emit = defineEmits(['success']);
 
 // 定义变量内容
 const deptDialogFormRef = ref();
@@ -85,28 +85,21 @@ const state = reactive({
 });
 
 // 提交
-const onSubmit = () => {
+const onSubmit = async () => {
 	if (props.id) {
-		updateDept(props.id, state.ruleForm).then(() => {
-			ElMessage.success('更新成功');
-			emit('refresh');
-		});
+		await updateDept(props.id, state.ruleForm);
+		ElMessage.success('更新成功');
 	} else {
-		createDept(state.ruleForm).then(() => {
-			ElMessage.success('新增成功');
-			emit('refresh');
-		});
+		await createDept(state.ruleForm);
+		ElMessage.success('新增成功');
 	}
+	emit('success');
 };
 // 页面加载时
-onMounted(() => {
-	getTreeDept().then((res) => {
-		state.deptData = res;
-	});
+onMounted(async () => {
+	state.deptData = await getTreeDept();
 	if (props.id) {
-		getDeptInfo(props.id).then((res) => {
-			state.ruleForm = res;
-		});
+		state.ruleForm = await getDeptInfo(props.id);
 	}
 	if (props.parent_id) {
 		state.ruleForm.parent_id = props.parent_id;

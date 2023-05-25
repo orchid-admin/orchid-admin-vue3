@@ -55,7 +55,7 @@
 			</el-pagination>
 		</div>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
-			<RoleDialog ref="roleDialogRef" @refresh="dialogSuccess" :id="state.row.id" />
+			<RoleDialog ref="roleDialogRef" @success="onSuccess" @cancel="onCancel" :id="state.row.id" />
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button size="default" @click="onCancel">取 消</el-button>
@@ -116,7 +116,7 @@ const getTableData = () => {
 const onSearchQuery = () => {
 	getTableData();
 };
-const dialogSuccess = () => {
+const onSuccess = () => {
 	getTableData();
 };
 const onCancel = () => {
