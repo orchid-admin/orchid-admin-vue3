@@ -83,17 +83,9 @@ export interface UserPermission {
 	 */
 	btn_auths: string[];
 	/**
-	 * 头像地址
+	 * 用户信息
 	 */
-	photo: string;
-	/**
-	 * 到期实际
-	 */
-	time: number;
-	/**
-	 * 用户名称
-	 */
-	username: string;
+	info: UserInfo;
 }
 /**
  * 用户-菜单

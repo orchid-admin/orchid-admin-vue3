@@ -1,26 +1,26 @@
 <template>
 	<div class="system-user-dialog-container">
-		<el-form ref="userDialogFormRef" :model="state.ruleForm" size="default" label-width="90px">
+		<el-form ref="userDialogFormRef" :rules="rules" :model="state.ruleForm" size="default" label-width="90px">
 			<el-row :gutter="35">
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="账户名称">
+					<el-form-item label="账户名称" prop="username">
 						<el-input v-model="state.ruleForm.username" placeholder="请输入账户名称" clearable></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="用户昵称">
+					<el-form-item label="用户昵称" prop="nickname">
 						<el-input v-model="state.ruleForm.nickname" placeholder="请输入用户昵称" clearable></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="关联角色">
+					<el-form-item label="关联角色" prop="role_id">
 						<el-select v-model="state.ruleForm.role_id" placeholder="请选择" clearable class="w100">
 							<el-option v-for="item in state.roles" :key="item.id" :label="item.name" :value="item.id"></el-option>
 						</el-select>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="部门">
+					<el-form-item label="部门" prop="dept_id">
 						<el-cascader
 							:options="state.depts"
 							:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'name' }"
@@ -38,17 +38,17 @@
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="手机号">
+					<el-form-item label="手机号" prop="phone">
 						<el-input v-model="state.ruleForm.phone" placeholder="请输入手机号" clearable></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="邮箱">
+					<el-form-item label="邮箱" prop="email">
 						<el-input v-model="state.ruleForm.email" placeholder="请输入" clearable></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="性别">
+					<el-form-item label="性别" prop="sex">
 						<el-radio-group v-model="state.ruleForm.sex" class="ml-4">
 							<el-radio :label="1">男</el-radio>
 							<el-radio :label="2">女</el-radio>
@@ -56,22 +56,22 @@
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="账户密码">
+					<el-form-item label="账户密码" prop="password">
 						<el-input v-model="state.ruleForm.password" placeholder="请输入" type="password" clearable></el-input>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="账户过期">
+					<el-form-item label="账户过期" prop="expire_time">
 						<el-date-picker v-model="state.ruleForm.expire_time" type="date" placeholder="请选择" class="w100"> </el-date-picker>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-					<el-form-item label="用户状态">
+					<el-form-item label="用户状态" prop="status">
 						<el-switch v-model="state.ruleForm.status" inline-prompt active-text="启" inactive-text="禁"></el-switch>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-					<el-form-item label="用户描述">
+					<el-form-item label="用户描述" prop="describe">
 						<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入用户描述" maxlength="150"></el-input>
 					</el-form-item>
 				</el-col>
@@ -87,7 +87,7 @@ import { getTreeDept } from '/@/api/dept';
 import { getRoleAll } from '/@/api/role';
 import { createUser, getUserInfo, updateUser } from '/@/api/user';
 import { UserCreateRequest } from '/@/types/bindings';
-import { ElMessage } from 'element-plus';
+import { ElMessage, FormRules } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['success']);
@@ -110,6 +110,26 @@ const state = reactive({
 	} as UserCreateRequest,
 	depts: [] as DeptTree[], // 部门数据
 	roles: [] as RoleList[], // 角色数据
+});
+const rules = reactive<FormRules>({
+	username: [
+		{
+			required: true,
+			message: '请输入用户名',
+		},
+	],
+	sort: [
+		{
+			required: true,
+			message: '请输入排序',
+		},
+	],
+	status: [
+		{
+			required: true,
+			message: '请输入选择状态',
+		},
+	],
 });
 
 // 提交

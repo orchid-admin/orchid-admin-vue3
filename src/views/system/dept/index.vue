@@ -29,8 +29,9 @@
 				default-expand-all
 				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
 			>
-				<el-table-column prop="id" label="ID" show-overflow-tooltip> </el-table-column>
-				<el-table-column prop="name" label="部门名称" show-overflow-tooltip> </el-table-column>
+				<el-table-column label="部门名称" show-overflow-tooltip>
+					<template #default="scope"> {{ scope.row.name }}[{{ scope.row.id }}] </template>
+				</el-table-column>
 				<el-table-column prop="describe" label="部门描述" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="status" label="部门状态" show-overflow-tooltip>
 					<template #default="scope">
@@ -40,7 +41,7 @@
 				</el-table-column>
 				<el-table-column label="排序" show-overflow-tooltip width="80">
 					<template #default="scope">
-						{{ scope.$index }}
+						{{ scope.row.sort }}
 					</template>
 				</el-table-column>
 				<el-table-column prop="created_at" label="创建时间" show-overflow-tooltip></el-table-column>

@@ -8,7 +8,7 @@ import { judementSameArr } from '/@/utils/arrayOperation';
  */
 export function auth(value: string): boolean {
 	const stores = useUserInfo();
-	return stores.userInfos.authBtnList.some((v: string) => v === value);
+	return stores.userInfos.btn_auths.some((v: string) => v === value);
 }
 
 /**
@@ -19,7 +19,7 @@ export function auth(value: string): boolean {
 export function auths(value: Array<string>): boolean {
 	let flag = false;
 	const stores = useUserInfo();
-	stores.userInfos.authBtnList.map((val: string) => {
+	stores.userInfos.btn_auths.map((val: string) => {
 		value.map((v: string) => {
 			if (val === v) flag = true;
 		});
@@ -34,5 +34,5 @@ export function auths(value: Array<string>): boolean {
  */
 export function authAll(value: Array<string>): boolean {
 	const stores = useUserInfo();
-	return judementSameArr(value, stores.userInfos.authBtnList);
+	return judementSameArr(value, stores.userInfos.btn_auths);
 }

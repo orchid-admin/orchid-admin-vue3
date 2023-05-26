@@ -1,7 +1,8 @@
 import { defineStore } from 'pinia';
 import { Session } from '/@/utils/storage';
 import { getUserPermission } from '/@/api/user';
-import { UserPermission } from '../types/bindings';
+import { UserInfo, UserPermission } from '../types/bindings';
+import { UserInfosState } from '../types/pinia';
 
 /**
  * 用户信息
@@ -10,10 +11,8 @@ import { UserPermission } from '../types/bindings';
 export const useUserInfo = defineStore('userInfo', {
 	state: (): UserInfosState => ({
 		userInfos: {
-			userName: '',
-			photo: '',
-			time: 0,
-			authBtnList: [],
+			btn_auths: [],
+			info: {} as UserInfo,
 		},
 	}),
 	actions: {
@@ -22,13 +21,7 @@ export const useUserInfo = defineStore('userInfo', {
 			if (Session.get('userInfo')) {
 				this.userInfos = Session.get('userInfo');
 			} else {
-				const userInfos = <UserPermission>await getUserPermission();
-				this.userInfos = {
-					userName: userInfos.username,
-					photo: userInfos.photo,
-					time: userInfos.time,
-					authBtnList: userInfos.btn_auths,
-				};
+				this.userInfos = <UserPermission>await getUserPermission();
 			}
 		},
 	},

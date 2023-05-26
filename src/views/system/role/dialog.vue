@@ -1,33 +1,28 @@
 <template>
-	<el-form ref="roleDialogFormRef" :model="state.ruleForm" size="default" label-width="90px">
+	<el-form ref="roleDialogFormRef" :rules="rules" :model="state.ruleForm" size="default" label-width="90px">
 		<el-row :gutter="35">
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-				<el-form-item label="角色名称">
+				<el-form-item label="角色名称" prop="name">
 					<el-input v-model="state.ruleForm.name" placeholder="请输入角色名称" clearable></el-input>
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-				<el-form-item label="角色标识">
-					<template #label>
-						<el-tooltip effect="dark" content="用于 `router/route.ts` meta.roles" placement="top-start">
-							<span>角色标识</span>
-						</el-tooltip>
-					</template>
+				<el-form-item label="角色标识" prop="sign">
 					<el-input v-model="state.ruleForm.sign" placeholder="请输入角色标识" clearable></el-input>
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-				<el-form-item label="排序">
+				<el-form-item label="排序" prop="sort">
 					<el-input-number v-model="state.ruleForm.sort" :min="0" :max="999" controls-position="right" placeholder="请输入排序" class="w100" />
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
-				<el-form-item label="角色状态">
+				<el-form-item label="角色状态" prop="status">
 					<el-switch v-model="state.ruleForm.status" inline-prompt active-text="启" inactive-text="禁"></el-switch>
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
-				<el-form-item label="角色描述">
+				<el-form-item label="角色描述" prop="describe">
 					<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
 				</el-form-item>
 			</el-col>
@@ -45,7 +40,7 @@ import { onMounted, reactive, ref } from 'vue';
 import { MenuTree, RoleCreateRequest } from '/@/types/bindings';
 import { getTreeMenu } from '/@/api/menu';
 import { createRole, getRoleInfo, updateRole } from '/@/api/role';
-import { ElMessage, ElTree } from 'element-plus';
+import { ElMessage, ElTree, FormRules } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['success', 'cancel']);
@@ -66,6 +61,32 @@ const state = reactive({
 		children: 'children',
 		label: 'title',
 	},
+});
+const rules = reactive<FormRules>({
+	name: [
+		{
+			required: true,
+			message: '请输入角色名称',
+		},
+	],
+	sign: [
+		{
+			required: true,
+			message: '请输入角色标识',
+		},
+	],
+	sort: [
+		{
+			required: true,
+			message: '请输入排序',
+		},
+	],
+	status: [
+		{
+			required: true,
+			message: '请输入选择状态',
+		},
+	],
 });
 
 // 提交

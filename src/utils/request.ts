@@ -34,19 +34,19 @@ service.interceptors.request.use(
 service.interceptors.response.use(
 	(response) => {
 		// 对响应数据做点什么
-		const res = response.data;
-		if (res.code && res.code !== 0) {
+		const statusCode = response.status;
+		if (statusCode != 200) {
 			// `token` 过期或者账号已在别处登录
-			if (res.code === 401 || res.code === 4001) {
+			if (statusCode === 401) {
 				Session.clear(); // 清除浏览器全部临时缓存
 				window.location.href = '/'; // 去登录页
-				ElMessageBox.alert('你已被登出，请重新登录', '提示', {})
+				ElMessageBox.alert(response.data)
 					.then(() => {})
 					.catch(() => {});
 			}
 			return Promise.reject(service.interceptors.response);
 		} else {
-			return res;
+			return response.data;
 		}
 	},
 	(error) => {
@@ -56,7 +56,7 @@ service.interceptors.response.use(
 		} else if (error.message == 'Network Error') {
 			ElMessage.error('网络连接错误');
 		} else {
-			if (error.response.data) ElMessage.error(error.response.data.errmsg);
+			if (error.response.data) ElMessage.error(error.response.data);
 			else ElMessage.error('接口路径找不到');
 		}
 		return Promise.reject(error);

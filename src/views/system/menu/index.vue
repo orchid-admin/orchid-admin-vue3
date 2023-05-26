@@ -30,7 +30,7 @@
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.icon" />
-						<span class="ml10">[{{ scope.row.id }}]{{ scope.row.title }}</span>
+						<span class="ml10">{{ scope.row.title }}[{{ scope.row.id }}]</span>
 					</template>
 				</el-table-column>
 				<el-table-column label="菜单类型">
@@ -43,10 +43,21 @@
 						<el-text size="small" type="success" v-if="scope.row.type == 6">API接口</el-text>
 					</template>
 				</el-table-column>
-				<el-table-column prop="router_path" label="路由路径" show-overflow-tooltip></el-table-column>
-				<el-table-column label="组件路径" show-overflow-tooltip>
+				<el-table-column label="详情">
 					<template #default="scope">
-						<span>{{ scope.row.router_component }}</span>
+						<div v-if="scope.row.type == 1">
+							<el-button v-if="scope.row.router_name" size="small" type="success" plain>{{ scope.row.router_name }}</el-button>
+							<el-button v-if="scope.row.router_path" size="small" type="success" plain>{{ scope.row.router_path }}</el-button>
+							<el-button v-if="scope.row.router_component" size="small" type="success" plain>{{ scope.row.router_component }}</el-button>
+						</div>
+						<el-button v-if="scope.row.type == 2" size="small" type="success" text>{{ scope.row.redirect }}</el-button>
+						<el-button v-if="scope.row.type == 3" size="small" type="primary" link>{{ scope.row.link }}</el-button>
+						<el-button v-if="scope.row.type == 4" size="small" type="primary" link>{{ scope.row.iframe }}</el-button>
+						<el-button v-if="scope.row.type == 5" size="small" type="success" text>{{ scope.row.btn_auth }}</el-button>
+						<div v-if="scope.row.type == 6">
+							<el-button v-if="scope.row.api_method" size="small" type="primary" plain>{{ scope.row.api_method }}</el-button>
+							<el-button v-if="scope.row.api_url" size="small" type="success" plain>{{ scope.row.api_url }}</el-button>
+						</div>
 					</template>
 				</el-table-column>
 				<el-table-column label="排序" show-overflow-tooltip width="80">

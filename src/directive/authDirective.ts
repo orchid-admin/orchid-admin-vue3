@@ -13,7 +13,7 @@ export function authDirective(app: App) {
 	app.directive('auth', {
 		mounted(el, binding) {
 			const stores = useUserInfo();
-			if (!stores.userInfos.authBtnList.some((v: string) => v === binding.value)) el.parentNode.removeChild(el);
+			if (!stores.userInfos.btn_auths.some((v: string) => v === binding.value)) el.parentNode.removeChild(el);
 		},
 	});
 	// 多个权限验证，满足一个则显示（v-auths="[xxx,xxx]"）
@@ -21,7 +21,7 @@ export function authDirective(app: App) {
 		mounted(el, binding) {
 			let flag = false;
 			const stores = useUserInfo();
-			stores.userInfos.authBtnList.map((val: string) => {
+			stores.userInfos.btn_auths.map((val: string) => {
 				binding.value.map((v: string) => {
 					if (val === v) flag = true;
 				});
@@ -33,7 +33,7 @@ export function authDirective(app: App) {
 	app.directive('auth-all', {
 		mounted(el, binding) {
 			const stores = useUserInfo();
-			const flag = judementSameArr(binding.value, stores.userInfos.authBtnList);
+			const flag = judementSameArr(binding.value, stores.userInfos.btn_auths);
 			if (!flag) el.parentNode.removeChild(el);
 		},
 	});

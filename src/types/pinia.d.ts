@@ -2,13 +2,12 @@
  * pinia 类型定义
  */
 
+import { UserInfo } from './bindings';
+
 // 用户信息
-declare interface UserInfos<T = any> {
-	authBtnList: string[];
-	photo: string;
-	time: number;
-	userName: string;
-	[key: string]: T;
+declare interface UserInfos {
+	btn_auths: string[];
+	info: UserInfo;
 }
 declare interface UserInfosState {
 	userInfos: UserInfos;

@@ -11,6 +11,7 @@
 					:options="state.depts"
 					:props="deptsDefaultProps"
 					:show-all-levels="false"
+					size="default"
 					placeholder="请选择部门"
 					clearable
 				/>
