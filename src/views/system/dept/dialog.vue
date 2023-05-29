@@ -1,5 +1,5 @@
 <template>
-	<el-form ref="deptDialogFormRef" :rules="rules" :model="state.ruleForm" size="default" label-width="90px">
+	<el-form ref="formRef" :rules="rules" :model="state.ruleForm" size="default" label-width="90px">
 		<el-row :gutter="35">
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="上级部门" prop="parent_id">
@@ -63,13 +63,13 @@
 import { onMounted, reactive, ref } from 'vue';
 import { DeptCreateRequest, DeptTree } from '/@/types/bindings';
 import { createDept, getDeptInfo, getTreeDept, updateDept } from '/@/api/dept';
-import { ElMessage, FormRules } from 'element-plus';
+import { ElMessage, FormInstance, FormRules } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['success']);
 
 // 定义变量内容
-const deptDialogFormRef = ref();
+const formRef = ref();
 const state = reactive({
 	ruleForm: {
 		parent_id: 0, // 上级部门
@@ -105,15 +105,20 @@ const rules = reactive<FormRules>({
 });
 
 // 提交
-const onSubmit = async () => {
-	if (props.id) {
-		await updateDept(props.id, state.ruleForm);
-		ElMessage.success('更新成功');
-	} else {
-		await createDept(state.ruleForm);
-		ElMessage.success('新增成功');
-	}
-	emit('success');
+const onSubmit = async (formEl: FormInstance | undefined) => {
+	if (!formEl) return;
+	await formEl!.validate(async (valid) => {
+		if (valid) {
+			if (props.id) {
+				await updateDept(props.id, state.ruleForm);
+				ElMessage.success('更新成功');
+			} else {
+				await createDept(state.ruleForm);
+				ElMessage.success('新增成功');
+			}
+			emit('success');
+		}
+	});
 };
 // 页面加载时
 onMounted(async () => {
@@ -136,5 +141,5 @@ const props = defineProps({
 		required: true,
 	},
 });
-defineExpose({ onSubmit });
+defineExpose({ onSubmit, formRef });
 </script>

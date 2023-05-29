@@ -1,4 +1,4 @@
-import { PaginateResponse, UserCreateRequest, UserInfo, UserList, UserPermission } from '/@/types/bindings';
+import { PaginateResponse, UpdatePasswordRequest, UserCreateRequest, UserInfo, UserList, UserPermission } from '/@/types/bindings';
 import request from '/@/utils/request';
 
 export const getUserPermission = (params?: object) => {
@@ -39,5 +39,12 @@ export const deleteUser = (id: number) => {
 	return request<any, any>({
 		url: '/user/' + id,
 		method: 'delete',
+	});
+};
+export const updatePassword = (data: UpdatePasswordRequest) => {
+	return request<any, any>({
+		url: '/user/update_password',
+		method: 'put',
+		data,
 	});
 };

@@ -702,6 +702,23 @@ export interface UserCreateRequest {
 	username: string;
 }
 /**
+ * 修改密码
+ */
+export interface UpdatePasswordRequest {
+	/**
+	 * 旧密码
+	 */
+	old_password: String;
+	/**
+	 * 新密码
+	 */
+	new_password: String;
+	/**
+	 * 确认新密码
+	 */
+	confirm_password: String;
+}
+/**
  * 用户-列表
  */
 export interface UserList {
@@ -761,9 +778,19 @@ export interface UserList {
  */
 export interface UserInfo extends DataPower {
 	/**
+	 * 上次登录时间
+	 */
+	last_login_time: string | null;
+	/**
+	 * 上次登录IP
+	 */
+	last_login_ip: string;
+	/**
 	 * 创建时间
 	 */
 	created_at: string;
+	role: RoleInfo | null;
+	dept: DeptInfo | null;
 	/**
 	 * 部门ID
 	 */

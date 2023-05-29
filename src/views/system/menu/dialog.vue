@@ -1,5 +1,5 @@
 <template>
-	<el-form ref="menuDialogFormRef" :rules="rules" :model="state.ruleForm" size="default" label-width="80px">
+	<el-form ref="formRef" :rules="rules" :model="state.ruleForm" size="default" label-width="80px">
 		<el-row :gutter="35">
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="上级菜单" prop="parent_id">
@@ -154,7 +154,7 @@ import { MenuCreateRequest } from '/@/types/bindings';
 const IconSelector = defineAsyncComponent(() => import('/@/components/iconSelector/index.vue'));
 
 // 定义变量内容
-const menuDialogFormRef = ref();
+const formRef = ref();
 const state = reactive({
 	// 参数请参考 `/src/router/route.ts` 中的 `dynamicRoutes` 路由菜单格式
 	ruleForm: {
@@ -304,5 +304,5 @@ const props = defineProps({
 		required: true,
 	},
 });
-defineExpose({ onSubmit, menuDialogFormRef });
+defineExpose({ onSubmit, formRef });
 </script>

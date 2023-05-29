@@ -1,5 +1,5 @@
 <template>
-	<el-form ref="roleDialogFormRef" :rules="rules" :model="state.ruleForm" size="default" label-width="90px">
+	<el-form ref="formRef" :rules="rules" :model="state.ruleForm" size="default" label-width="90px">
 		<el-row :gutter="35">
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 				<el-form-item label="角色名称" prop="name">
@@ -40,12 +40,13 @@ import { onMounted, reactive, ref } from 'vue';
 import { MenuTree, RoleCreateRequest } from '/@/types/bindings';
 import { getTreeMenu } from '/@/api/menu';
 import { createRole, getRoleInfo, updateRole } from '/@/api/role';
-import { ElMessage, ElTree, FormRules } from 'element-plus';
+import { ElMessage, ElTree, FormInstance, FormRules } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['success', 'cancel']);
 
 // 定义变量内容
+const formRef = ref();
 const treeRef = ref<InstanceType<typeof ElTree>>();
 const state = reactive({
 	ruleForm: {
@@ -90,17 +91,22 @@ const rules = reactive<FormRules>({
 });
 
 // 提交
-const onSubmit = async () => {
-	let menu_ids = treeRef.value!.getCheckedKeys().concat(treeRef.value!.getHalfCheckedKeys()) as number[];
-	state.ruleForm.menu_ids = menu_ids;
-	if (props.id) {
-		await updateRole(props.id, state.ruleForm);
-		ElMessage.success('更新成功');
-	} else {
-		await createRole(state.ruleForm);
-		ElMessage.success('新增成功');
-	}
-	emit('success');
+const onSubmit = async (formEl: FormInstance | undefined) => {
+	if (!formEl) return;
+	await formEl!.validate(async (valid) => {
+		if (valid) {
+			let menu_ids = treeRef.value!.getCheckedKeys().concat(treeRef.value!.getHalfCheckedKeys()) as number[];
+			state.ruleForm.menu_ids = menu_ids;
+			if (props.id) {
+				await updateRole(props.id, state.ruleForm);
+				ElMessage.success('更新成功');
+			} else {
+				await createRole(state.ruleForm);
+				ElMessage.success('新增成功');
+			}
+			emit('success');
+		}
+	});
 };
 // 页面加载时
 onMounted(async () => {
@@ -124,7 +130,7 @@ const props = defineProps({
 		required: true,
 	},
 });
-defineExpose({ onSubmit });
+defineExpose({ onSubmit, formRef });
 </script>
 
 <style scoped lang="scss">

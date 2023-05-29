@@ -31,11 +31,11 @@
 									<el-row>
 										<el-col :xs="24" :sm="8" class="personal-item mb6">
 											<div class="personal-item-label">登录IP：</div>
-											<div class="personal-item-value">192.168.1.1</div>
+											<div class="personal-item-value">{{ userInfos.info.last_login_ip }}</div>
 										</el-col>
 										<el-col :xs="24" :sm="16" class="personal-item mb6">
 											<div class="personal-item-label">登录时间：</div>
-											<div class="personal-item-value">2021-02-05 18:47:26</div>
+											<div class="personal-item-value">{{ userInfos.info.last_login_time }}</div>
 										</el-col>
 									</el-row>
 								</el-col>
@@ -70,14 +70,14 @@
 						<div class="personal-edit-safe-item">
 							<div class="personal-edit-safe-item-left">
 								<div class="personal-edit-safe-item-left-label">账户密码</div>
-								<div class="personal-edit-safe-item-left-value">当前密码强度：强</div>
+								<!-- <div class="personal-edit-safe-item-left-value">当前密码强度：强</div> -->
 							</div>
 							<div class="personal-edit-safe-item-right">
-								<el-button text type="primary">立即修改</el-button>
+								<el-button text type="primary" @click="onUpdatePassword">立即修改</el-button>
 							</div>
 						</div>
 					</div>
-					<div class="personal-edit-safe-box">
+					<!-- <div class="personal-edit-safe-box">
 						<div class="personal-edit-safe-item">
 							<div class="personal-edit-safe-item-left">
 								<div class="personal-edit-safe-item-left-label">密保手机</div>
@@ -109,15 +109,24 @@
 								<el-button text type="primary">立即设置</el-button>
 							</div>
 						</div>
-					</div>
+					</div> -->
 				</el-card>
 			</el-col>
 		</el-row>
+		<el-dialog :title="state.updatePasswordDialog.title" v-model="state.updatePasswordDialog.isShowDialog" width="400px" destroy-on-close>
+			<updatePasswordDialog ref="updatePasswordDialogRef" @success="onUpdatePasswordCancel" />
+			<template #footer>
+				<span class="dialog-footer">
+					<el-button size="default" @click="onUpdatePasswordCancel">取 消</el-button>
+					<el-button type="primary" size="default" @click="onUpdatePasswordSubmit">提交</el-button>
+				</span>
+			</template>
+		</el-dialog>
 	</div>
 </template>
 
 <script setup lang="ts" name="personal">
-import { reactive, computed } from 'vue';
+import { reactive, computed, ref, defineAsyncComponent } from 'vue';
 import { formatAxis } from '/@/utils/formatTime';
 import { newsInfoList, recommendList } from './mock';
 import { useUserInfo } from '/@/stores/userInfo';
@@ -125,7 +134,11 @@ import { storeToRefs } from 'pinia';
 const stores = useUserInfo();
 const { userInfos } = storeToRefs(stores);
 
+// 引入组件
+const updatePasswordDialog = defineAsyncComponent(() => import('/@/views/system/personal/updatePassword.vue'));
+
 // 定义变量内容
+const updatePasswordDialogRef = ref();
 const state = reactive({
 	newsInfoList,
 	recommendList,
@@ -137,12 +150,28 @@ const state = reactive({
 		phone: '',
 		sex: '',
 	},
+	updatePasswordDialog: {
+		isShowDialog: false,
+		type: '',
+		title: '',
+		submitTxt: '',
+	},
 });
 
 // 当前时间提示语
 const currentTime = computed(() => {
 	return formatAxis(new Date());
 });
+
+const onUpdatePassword = () => {
+	state.updatePasswordDialog.isShowDialog = true;
+};
+const onUpdatePasswordCancel = () => {
+	state.updatePasswordDialog.isShowDialog = false;
+};
+const onUpdatePasswordSubmit = () => {
+	updatePasswordDialogRef.value.onSubmit(updatePasswordDialogRef.value.formRef);
+};
 </script>
 
 <style scoped lang="scss">

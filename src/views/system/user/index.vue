@@ -148,7 +148,7 @@ const onCancel = () => {
 	state.dialog.isShowDialog = false;
 };
 const onSubmit = () => {
-	userDialogRef.value.onSubmit();
+	userDialogRef.value.onSubmit(userDialogRef.value.formRef);
 };
 // 打开新增用户弹窗
 const onOpenAddUser = () => {

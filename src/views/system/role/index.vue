@@ -123,7 +123,7 @@ const onCancel = () => {
 	state.dialog.isShowDialog = false;
 };
 const onSubmit = () => {
-	roleDialogRef.value.onSubmit();
+	roleDialogRef.value.onSubmit(roleDialogRef.value.formRef);
 };
 // 打开新增角色弹窗
 const onOpenAddRole = () => {

@@ -119,7 +119,7 @@ const onCancel = () => {
 	state.dialog.isShowDialog = false;
 };
 const onSubmit = () => {
-	deptDialogRef.value.onSubmit();
+	deptDialogRef.value.onSubmit(deptDialogRef.value.formRef);
 };
 // 打开新增菜单弹窗
 const onOpenAddDept = () => {

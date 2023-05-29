@@ -1,6 +1,6 @@
 <template>
 	<div class="system-user-dialog-container">
-		<el-form ref="userDialogFormRef" :rules="rules" :model="state.ruleForm" size="default" label-width="90px">
+		<el-form ref="formRef" :rules="rules" :model="state.ruleForm" size="default" label-width="90px">
 			<el-row :gutter="35">
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="账户名称" prop="username">
@@ -87,13 +87,13 @@ import { getTreeDept } from '/@/api/dept';
 import { getRoleAll } from '/@/api/role';
 import { createUser, getUserInfo, updateUser } from '/@/api/user';
 import { UserCreateRequest } from '/@/types/bindings';
-import { ElMessage, FormRules } from 'element-plus';
+import { ElMessage, FormInstance, FormRules } from 'element-plus';
 
 // 定义子组件向父组件传值/事件
 const emit = defineEmits(['success']);
 
 // 定义变量内容
-const userDialogFormRef = ref();
+const formRef = ref();
 const state = reactive({
 	ruleForm: {
 		username: '', // 账户名称
@@ -133,31 +133,36 @@ const rules = reactive<FormRules>({
 });
 
 // 提交
-const onSubmit = () => {
-	let params = {
-		username: state.ruleForm.username,
-		nickname: state.ruleForm.nickname,
-		phone: state.ruleForm.phone,
-		email: state.ruleForm.email,
-		password: state.ruleForm.password,
-		expire_time: state.ruleForm.expire_time,
-		status: state.ruleForm.status,
-		describe: state.ruleForm.describe,
-	} as UserCreateRequest;
-	params.role_id = !state.ruleForm.role_id ? 0 : state.ruleForm.role_id;
-	params.dept_id = !state.ruleForm.dept_id ? 0 : state.ruleForm.dept_id;
-	params.sex = !state.ruleForm.sex ? 0 : state.ruleForm.sex;
-	if (props.id) {
-		updateUser(props.id, params).then(() => {
-			ElMessage.success('更新成功');
-			emit('success');
-		});
-	} else {
-		createUser(params).then(() => {
-			ElMessage.success('新增成功');
-			emit('success');
-		});
-	}
+const onSubmit = async (formEl: FormInstance | undefined) => {
+	if (!formEl) return;
+	await formEl!.validate(async (valid) => {
+		if (valid) {
+			let params = {
+				username: state.ruleForm.username,
+				nickname: state.ruleForm.nickname,
+				phone: state.ruleForm.phone,
+				email: state.ruleForm.email,
+				password: state.ruleForm.password,
+				expire_time: state.ruleForm.expire_time,
+				status: state.ruleForm.status,
+				describe: state.ruleForm.describe,
+			} as UserCreateRequest;
+			params.role_id = !state.ruleForm.role_id ? 0 : state.ruleForm.role_id;
+			params.dept_id = !state.ruleForm.dept_id ? 0 : state.ruleForm.dept_id;
+			params.sex = !state.ruleForm.sex ? 0 : state.ruleForm.sex;
+			if (props.id) {
+				updateUser(props.id, params).then(() => {
+					ElMessage.success('更新成功');
+					emit('success');
+				});
+			} else {
+				createUser(params).then(() => {
+					ElMessage.success('新增成功');
+					emit('success');
+				});
+			}
+		}
+	});
 };
 
 // 页面加载时
@@ -183,5 +188,6 @@ const props = defineProps({
 // 暴露变量
 defineExpose({
 	onSubmit,
+	formRef,
 });
 </script>
