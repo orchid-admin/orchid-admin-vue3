@@ -8,23 +8,23 @@
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation2">
-			<el-input :type="state.isShowPassword ? 'text' : 'password'" placeholder="密码" v-model="state.ruleForm.password" autocomplete="new-password">
+			<el-input :type="state.isShowPassword ? 'text' : 'password'" placeholder="密码" v-model="state.ruleForm.password"
+				autocomplete="new-password">
 				<template #prefix>
 					<el-icon class="el-input__icon"><ele-Unlock /></el-icon>
 				</template>
 				<template #suffix>
-					<i
-						class="iconfont el-input__icon login-content-password"
+					<i class="iconfont el-input__icon login-content-password"
 						:class="state.isShowPassword ? 'icon-yincangmima' : 'icon-xianshimima'"
-						@click="state.isShowPassword = !state.isShowPassword"
-					>
+						@click="state.isShowPassword = !state.isShowPassword">
 					</i>
 				</template>
 			</el-input>
 		</el-form-item>
 		<el-form-item class="login-animation3">
 			<el-col :span="15">
-				<el-input text maxlength="5" placeholder="请输入验证码" v-model="state.ruleForm.code" clearable autocomplete="off">
+				<el-input text maxlength="5" placeholder="请输入验证码" v-model="state.ruleForm.code" clearable
+					autocomplete="off">
 					<template #prefix>
 						<el-icon class="el-input__icon"><ele-Position /></el-icon>
 					</template>
@@ -38,7 +38,8 @@
 			</el-col>
 		</el-form-item>
 		<el-form-item class="login-animation4">
-			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn" :loading="state.loading.signIn">
+			<el-button type="primary" class="login-content-submit" round v-waves @click="onSignIn"
+				:loading="state.loading.signIn">
 				<span>登 录</span>
 			</el-button>
 		</el-form-item>
