@@ -1,8 +1,8 @@
 <template>
-	<div class="system-role-container layout-padding">
-		<div class="system-role-padding layout-padding-auto layout-padding-view">
+	<div class="system-dic-container layout-padding">
+		<el-card shadow="hover" class="layout-padding-auto">
 			<div class="system-user-search mb15">
-				<el-input v-model="state.search.keyword" size="default" placeholder="请输入角色名称" style="max-width: 180px">
+				<el-input v-model="state.search.keyword" size="default" placeholder="请输入字典名称" style="max-width: 180px">
 				</el-input>
 				<el-select v-model="state.search.status" class="m-2" placeholder="状态" size="default" clearable>
 					<el-option label="开启" :value="1" />
@@ -14,32 +14,29 @@
 					</el-icon>
 					查询
 				</el-button>
-				<el-button size="default" type="success" class="ml10" @click="onOpenAddRole()">
+				<el-button size="default" type="success" class="ml10" @click="onOpenAddDict()">
 					<el-icon>
 						<ele-FolderAdd />
 					</el-icon>
-					新增角色
+					新增字典
 				</el-button>
 			</div>
-			<el-table :data="state.tableData.data" empty-text="暂无数据" v-loading="state.loading" style="width: 100%">
-				<el-table-column prop="id" label="ID" width="60" />
-				<el-table-column prop="name" label="角色名称" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="sign" label="角色标识" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="describe" label="角色描述" show-overflow-tooltip></el-table-column>
-				<el-table-column prop="status" label="角色状态" show-overflow-tooltip>
+			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
+				<el-table-column prop="id" label="ID" width="50" />
+				<el-table-column prop="name" label="字典名称" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="sign" label="标识" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="status" label="字典状态" show-overflow-tooltip>
 					<template #default="scope">
 						<el-tag type="success" v-if="scope.row.status">启用</el-tag>
 						<el-tag type="info" v-else>禁用</el-tag>
 					</template>
 				</el-table-column>
-				<el-table-column prop="sort" label="排序" show-overflow-tooltip></el-table-column>
+				<el-table-column prop="remark" label="字典描述" show-overflow-tooltip></el-table-column>
 				<el-table-column prop="created_at" label="创建时间" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100">
 					<template #default="scope">
-						<el-button :disabled="!scope.row._can_edit" size="small" text type="primary"
-							@click="onOpenEditRole(scope.row)">修改</el-button>
-						<el-button :disabled="!scope.row._can_delete" size="small" text type="primary"
-							@click="onRowDel(scope.row)">删除</el-button>
+						<el-button size="small" text type="primary" @click="onOpenEditDict(scope.row)">修改</el-button>
+						<el-button size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -48,9 +45,9 @@
 				v-model:page-size="state.search.limit" layout="total, sizes, prev, pager, next, jumper"
 				:total="state.tableData.total">
 			</el-pagination>
-		</div>
+		</el-card>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
-			<RoleDialog ref="roleDialogRef" @success="onSuccess" @cancel="onCancel" :id="state.row.id" />
+			<DictDialog ref="dictDialogRef" @success="onSuccess" :id="state.row.id" />
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button size="default" @click="onCancel">取 消</el-button>
@@ -61,23 +58,23 @@
 	</div>
 </template>
 
-<script setup lang="ts" name="systemRole">
+<script setup lang="ts" name="systemDic">
 import { defineAsyncComponent, reactive, onMounted, ref } from 'vue';
 import { ElMessageBox, ElMessage } from 'element-plus';
-import { deleteRole, getRolePaginate } from '/@/api/role';
-import { PaginateResponse, RoleSearchRequest, RoleList } from '/@/types/bindings';
+import { deleteDict, getDictPaginate } from '/@/api/dict';
+import { PaginateResponse, DictSearchRequest, DictInfo } from '/@/types/bindings';
 
 // 引入组件
-const RoleDialog = defineAsyncComponent(() => import('/@/views/system/role/dialog.vue'));
+const DictDialog = defineAsyncComponent(() => import('/@/views/system/dict/dialog.vue'));
 
 // 定义变量内容
-const roleDialogRef = ref();
+const dictDialogRef = ref();
 const state = reactive({
 	loading: false,
 	tableData: {
 		data: [],
 		total: 0,
-	} as PaginateResponse<RoleList>,
+	} as PaginateResponse<DictInfo>,
 	search: {
 		keyword: '',
 		status: null,
@@ -98,7 +95,7 @@ const state = reactive({
 const getTableData = () => {
 	state.loading = true;
 	state.dialog.isShowDialog = false;
-	getRolePaginate(state.search).then((res) => {
+	getDictPaginate(state.search).then((res) => {
 		state.tableData.data = res.data;
 		state.tableData.total = res.total;
 		state.loading = false;
@@ -114,27 +111,28 @@ const onCancel = () => {
 	state.dialog.isShowDialog = false;
 };
 const onSubmit = () => {
-	roleDialogRef.value.onSubmit(roleDialogRef.value.formRef);
+	console.log(111);
+	dictDialogRef.value.onSubmit(dictDialogRef.value.formRef);
 };
 // 打开新增角色弹窗
-const onOpenAddRole = () => {
+const onOpenAddDict = () => {
 	state.dialog.isShowDialog = true;
 	state.row.id = 0;
 };
 // 打开修改角色弹窗
-const onOpenEditRole = (row: RoleList) => {
+const onOpenEditDict = (row: DictInfo) => {
 	state.dialog.isShowDialog = true;
 	state.row.id = row.id;
 };
 // 删除角色
-const onRowDel = (row: RoleList) => {
-	ElMessageBox.confirm(`此操作将永久删除角色名称：“${row.name}”，是否继续?`, '提示', {
+const onRowDel = (row: DictInfo) => {
+	ElMessageBox.confirm(`此操作将永久删除字典名称：“${row.name}”，是否继续?`, '提示', {
 		confirmButtonText: '确认',
 		cancelButtonText: '取消',
 		type: 'warning',
 	})
 		.then(() => {
-			deleteRole(row.id).then(() => {
+			deleteDict(row.id).then(() => {
 				getTableData();
 				ElMessage.success('删除成功');
 			});
@@ -156,15 +154,3 @@ onMounted(() => {
 	getTableData();
 });
 </script>
-
-<style scoped lang="scss">
-.system-role-container {
-	.system-role-padding {
-		padding: 15px;
-
-		.el-table {
-			flex: 1;
-		}
-	}
-}
-</style>

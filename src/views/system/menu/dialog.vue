@@ -3,15 +3,9 @@
 		<el-row :gutter="35">
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="上级菜单" prop="parent_id">
-					<el-cascader
-						:options="state.menuData"
-						:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'title' }"
-						placeholder="请选择上级菜单"
-						clearable
-						class="w100"
-						filterable
-						v-model="state.ruleForm.parent_id"
-					>
+					<el-cascader :options="state.menuData"
+						:props="{ checkStrictly: true, emitPath: false, value: 'id', label: 'title' }" placeholder="请选择上级菜单"
+						clearable class="w100" filterable v-model="state.ruleForm.parent_id">
 						<template #default="{ node, data }">
 							<span>{{ data.title }}</span>
 							<span v-if="!node.isLeaf"> ({{ data.children.length }}) </span>
@@ -95,10 +89,7 @@
 						<el-select v-model="state.ruleForm.api_method" placeholder="请选择请求方法" clearable>
 							<el-option
 								v-for="item in ['GET', 'HEAD', 'POST', 'PUT', 'DELETE', 'CONNECT', 'OPTIONS', 'TRACE', 'PATCH']"
-								:key="item"
-								:label="item"
-								:value="item"
-							/>
+								:key="item" :label="item" :value="item" />
 						</el-select>
 					</el-form-item>
 				</el-col>
@@ -112,31 +103,32 @@
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="是否隐藏" prop="is_hide">
 						<el-radio-group v-model="state.ruleForm.is_hide">
-							<el-radio :label="true">隐藏</el-radio>
-							<el-radio :label="false">不隐藏</el-radio>
+							<el-radio :label="1">隐藏</el-radio>
+							<el-radio :label="0">不隐藏</el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="页面缓存" prop="is_keep_alive">
 						<el-radio-group v-model="state.ruleForm.is_keep_alive">
-							<el-radio :label="true">缓存</el-radio>
-							<el-radio :label="false">不缓存</el-radio>
+							<el-radio :label="1">缓存</el-radio>
+							<el-radio :label="0">不缓存</el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
 				<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 					<el-form-item label="是否固定" prop="is_affix">
 						<el-radio-group v-model="state.ruleForm.is_affix">
-							<el-radio :label="true">固定</el-radio>
-							<el-radio :label="false">不固定</el-radio>
+							<el-radio :label="1">固定</el-radio>
+							<el-radio :label="0">不固定</el-radio>
 						</el-radio-group>
 					</el-form-item>
 				</el-col>
 			</template>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 				<el-form-item label="菜单排序" prop="sort">
-					<el-input-number v-model="state.ruleForm.sort" controls-position="right" placeholder="请输入排序" class="w100" />
+					<el-input-number v-model="state.ruleForm.sort" controls-position="right" placeholder="请输入排序"
+						class="w100" />
 				</el-form-item>
 			</el-col>
 		</el-row>
@@ -171,9 +163,9 @@ const state = reactive({
 		btn_auth: '', // 菜单类型为按钮时，权限标识
 		api_url: '', // 接口地址
 		api_method: '', // 接口请求方法
-		is_hide: false, // 是否隐藏
-		is_keep_alive: false, // 是否缓存
-		is_affix: false, // 是否固定
+		is_hide: 0, // 是否隐藏
+		is_keep_alive: 0, // 是否缓存
+		is_affix: 0, // 是否固定
 		sort: 0, // 菜单排序
 	} as MenuCreateRequest,
 	menuData: [] as RouteItems, // 上级菜单数据

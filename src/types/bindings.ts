@@ -183,15 +183,15 @@ export interface MenuCreateRequest {
 	/**
 	 * 是否固定
 	 */
-	is_affix: boolean;
+	is_affix: number;
 	/**
 	 * 是否隐藏
 	 */
-	is_hide: boolean;
+	is_hide: number;
 	/**
 	 * 是否启用keepAlive
 	 */
-	is_keep_alive: boolean;
+	is_keep_alive: number;
 	/**
 	 * 链接地址
 	 */
@@ -265,15 +265,15 @@ export interface MenuTree {
 	/**
 	 * 是否固定
 	 */
-	is_affix: boolean;
+	is_affix: number;
 	/**
 	 * 是否隐藏
 	 */
-	is_hide: boolean;
+	is_hide: number;
 	/**
 	 * 是否启用keepAlive
 	 */
-	is_keep_alive: boolean;
+	is_keep_alive: number;
 	/**
 	 * 链接地址
 	 */
@@ -350,15 +350,15 @@ export interface MenuInfo {
 	/**
 	 * 是否固定
 	 */
-	is_affix: boolean;
+	is_affix: number;
 	/**
 	 * 是否隐藏
 	 */
-	is_hide: boolean;
+	is_hide: number;
 	/**
 	 * 是否开启keep_alive
 	 */
-	is_keep_alive: boolean;
+	is_keep_alive: number;
 	/**
 	 * 外链地址
 	 */
@@ -435,7 +435,7 @@ export interface RoleCreateRequest {
 	/**
 	 * 状态
 	 */
-	status: boolean;
+	status: number;
 }
 
 /**
@@ -461,7 +461,7 @@ export interface RoleList extends DataPower {
 	/**
 	 * 角色状态
 	 */
-	status: boolean;
+	status: number;
 }
 
 /**
@@ -487,7 +487,7 @@ export interface RoleInfo {
 	/**
 	 * 状态
 	 */
-	status: boolean;
+	status: number;
 	/**
 	 * 排序
 	 */
@@ -587,7 +587,7 @@ export interface DeptCreateRequest {
 	/**
 	 * 状态
 	 */
-	status: boolean;
+	status: number;
 }
 /**
  * 部门-详情
@@ -624,7 +624,7 @@ export interface DeptInfo {
 	/**
 	 * 状态
 	 */
-	status: boolean;
+	status: number;
 	/**
 	 * 排序
 	 */
@@ -695,7 +695,7 @@ export interface UserCreateRequest {
 	/**
 	 * 状态
 	 */
-	status: boolean;
+	status: number;
 	/**
 	 * 用户名
 	 */
@@ -830,7 +830,7 @@ export interface UserInfo extends DataPower {
 	/**
 	 * 状态
 	 */
-	status: boolean;
+	status: number;
 	/**
 	 * 用户名
 	 */
@@ -839,4 +839,78 @@ export interface UserInfo extends DataPower {
 	 * 密码
 	 */
 	password: string | null;
+}
+
+export interface DictSearchRequest extends PaginateRequest {
+	/**
+	 * 关键字
+	 */
+	keyword: string;
+	/**
+	 * 状态
+	 */
+	status: boolean | null;
+}
+export interface DictCreateRequest {
+	name: string;
+	sign: string;
+	remark?: string | null;
+	status: number;
+}
+
+export interface DictInfo {
+	id: number;
+	name: string;
+	sign: string;
+	status: number;
+	remark: string;
+	created_at: string;
+	data: DictDataInfo[];
+}
+
+export interface DictDataInfo {
+	id: number;
+	dict_id: number;
+	dict?: DictInfo | null;
+	label: string;
+	value: number;
+	status: number;
+	sort: number;
+	remark: string;
+	created_at: string;
+}
+
+export interface LoginLogSearchRequest extends PaginateRequest {
+	user_id?: number;
+	keyword?: string;
+	date?: string;
+}
+
+export interface LoginLogInfo {
+	id: number;
+	user_id: number;
+	user?: UserInfo | null;
+	ip_address: string;
+	ip_address_name: string;
+	browser_agent: string;
+	created_at: string;
+}
+
+export interface ActionLogSearchRequest extends PaginateRequest {
+	user_id?: number;
+	keyword?: string;
+	date?: string;
+}
+
+export interface ActionLogInfo {
+	id: number;
+	user_id: number;
+	user?: UserInfo | null;
+	menu_id: number;
+	menu?: MenuInfo | null;
+	menu_names: string;
+	ip_address: string;
+	ip_address_name: string;
+	browser_agent: string;
+	created_at: string;
 }

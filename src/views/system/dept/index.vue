@@ -2,10 +2,11 @@
 	<div class="system-dept-container layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto">
 			<div class="system-dept-search mb15">
-				<el-input v-model="state.search.keyword" size="default" placeholder="请输入部门名称" style="max-width: 180px"> </el-input>
+				<el-input v-model="state.search.keyword" size="default" placeholder="请输入部门名称" style="max-width: 180px">
+				</el-input>
 				<el-select v-model="state.search.status" class="m-2" placeholder="状态" size="default" clearable>
 					<el-option label="开启" :value="1" />
-					<el-option label="关闭" :value="2" />
+					<el-option label="禁用" :value="0" />
 				</el-select>
 				<el-button size="default" type="primary" class="ml10" @click="onSearchQuery">
 					<el-icon>
@@ -20,15 +21,8 @@
 					新增部门
 				</el-button>
 			</div>
-			<el-table
-				:data="state.tableData.data"
-				empty-text="暂无数据"
-				v-loading="state.loading"
-				style="width: 100%"
-				row-key="id"
-				default-expand-all
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-			>
+			<el-table :data="state.tableData.data" empty-text="暂无数据" v-loading="state.loading" style="width: 100%"
+				row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column label="部门名称" show-overflow-tooltip>
 					<template #default="scope"> {{ scope.row.name }}[{{ scope.row.id }}] </template>
 				</el-table-column>
@@ -85,7 +79,7 @@ const state = reactive({
 	search: {
 		keyword: '',
 		status: null,
-	},
+	} as DeptSearchRequest,
 	row: {
 		id: 0,
 		parent_id: 0,
@@ -102,11 +96,7 @@ const state = reactive({
 const getTableData = async () => {
 	state.loading = true;
 	state.dialog.isShowDialog = false;
-	let params = { keyword: state.search.keyword } as DeptSearchRequest;
-	if (state.search.status != null && [1, 2].includes(state.search.status)) {
-		params.status = state.search.status == 1;
-	}
-	state.tableData.data = await getTreeDept(params);
+	state.tableData.data = await getTreeDept(state.search);
 	state.loading = false;
 };
 const onSearchQuery = () => {
@@ -149,7 +139,7 @@ const onTabelRowDel = (row: DeptTree) => {
 			getTableData();
 			ElMessage.success('删除成功');
 		})
-		.catch(() => {});
+		.catch(() => { });
 };
 // 页面加载时
 onMounted(() => {

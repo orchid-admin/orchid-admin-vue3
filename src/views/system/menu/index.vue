@@ -2,8 +2,10 @@
 	<div class="system-menu-container layout-pd">
 		<el-card shadow="hover">
 			<div class="system-menu-search mb15">
-				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px" v-model="state.search.keyword"> </el-input>
-				<el-select v-model="state.search.menu_types" class="m-2" placeholder="请选择菜单类型" size="default" multiple clearable>
+				<el-input size="default" placeholder="请输入菜单名称" style="max-width: 180px" v-model="state.search.keyword">
+				</el-input>
+				<el-select v-model="state.search.menu_types" class="m-2" placeholder="请选择菜单类型" size="default" multiple
+					clearable>
 					<el-option v-for="item in menuTypes" :key="item.value" :label="item.label" :value="item.value" />
 				</el-select>
 				<el-button size="default" type="primary" class="ml10" @click="onSearchQuery">
@@ -19,14 +21,8 @@
 					新增菜单
 				</el-button>
 			</div>
-			<el-table
-				:data="state.tableData.data"
-				empty-text="暂无数据"
-				v-loading="state.loading"
-				style="width: 100%"
-				row-key="id"
-				:tree-props="{ children: 'children', hasChildren: 'hasChildren' }"
-			>
+			<el-table :data="state.tableData.data" empty-text="暂无数据" v-loading="state.loading" style="width: 100%"
+				row-key="id" :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column label="菜单名称" show-overflow-tooltip>
 					<template #default="scope">
 						<SvgIcon :name="scope.row.icon" />
@@ -43,20 +39,37 @@
 						<el-text size="small" type="success" v-if="scope.row.type == 6">API接口</el-text>
 					</template>
 				</el-table-column>
-				<el-table-column label="详情">
+				<el-table-column label="路由名称">
 					<template #default="scope">
 						<div v-if="scope.row.type == 1">
-							<el-button v-if="scope.row.router_name" size="small" type="success" plain>{{ scope.row.router_name }}</el-button>
-							<el-button v-if="scope.row.router_path" size="small" type="success" plain>{{ scope.row.router_path }}</el-button>
-							<el-button v-if="scope.row.router_component" size="small" type="success" plain>{{ scope.row.router_component }}</el-button>
+							<el-button v-if="scope.row.router_name" size="small" type="success" plain>{{
+								scope.row.router_name }}</el-button>
 						</div>
-						<el-button v-if="scope.row.type == 2" size="small" type="success" text>{{ scope.row.redirect }}</el-button>
-						<el-button v-if="scope.row.type == 3" size="small" type="primary" link>{{ scope.row.link }}</el-button>
-						<el-button v-if="scope.row.type == 4" size="small" type="primary" link>{{ scope.row.iframe }}</el-button>
-						<el-button v-if="scope.row.type == 5" size="small" type="success" text>{{ scope.row.btn_auth }}</el-button>
+					</template>
+				</el-table-column>
+				<el-table-column label="访问地址">
+					<template #default="scope">
+						<div v-if="scope.row.type == 1">
+							<el-button v-if="scope.row.router_path" size="small" type="success" plain>{{
+								scope.row.router_path }}</el-button>
+						</div>
+						<el-button v-if="scope.row.type == 2" size="small" type="success" text>{{ scope.row.redirect
+						}}</el-button>
+						<el-button v-if="scope.row.type == 3" size="small" type="primary" link>{{ scope.row.link
+						}}</el-button>
+						<el-button v-if="scope.row.type == 4" size="small" type="primary" link>{{ scope.row.iframe
+						}}</el-button>
+					</template>
+				</el-table-column>
+				<el-table-column label="路由地址">
+					<template #default="scope">
+						<el-button v-if="scope.row.type == 5" size="small" type="success" text>{{ scope.row.btn_auth
+						}}</el-button>
 						<div v-if="scope.row.type == 6">
-							<el-button v-if="scope.row.api_method" size="small" type="primary" plain>{{ scope.row.api_method }}</el-button>
-							<el-button v-if="scope.row.api_url" size="small" type="success" plain>{{ scope.row.api_url }}</el-button>
+							<el-button v-if="scope.row.api_method" size="small" type="primary" plain>{{ scope.row.api_method
+							}}</el-button>
+							<el-button v-if="scope.row.api_url" size="small" type="success" plain>{{ scope.row.api_url
+							}}</el-button>
 						</div>
 					</template>
 				</el-table-column>
@@ -67,9 +80,8 @@
 				</el-table-column>
 				<el-table-column label="操作" show-overflow-tooltip width="140">
 					<template #default="scope">
-						<el-button size="small" text type="primary" v-if="scope.row.type == 1 || scope.row.type == 2" @click="onAddChildrenMenu(scope.row.id)"
-							>新增</el-button
-						>
+						<el-button size="small" text type="primary" v-if="scope.row.type == 1 || scope.row.type == 2"
+							@click="onAddChildrenMenu(scope.row.id)">新增</el-button>
 						<el-button size="small" text type="primary" @click="onOpenEditMenu(scope.row)">修改</el-button>
 						<el-button size="small" text type="primary" @click="onTabelRowDel(scope.row)">删除</el-button>
 					</template>
@@ -77,7 +89,8 @@
 			</el-table>
 		</el-card>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
-			<MenuDialog ref="menuDialogRef" @success="onSuccess" :menuData="state.tableData.data" :id="state.row.id" :parent_id="state.row.parent_id" />
+			<MenuDialog ref="menuDialogRef" @success="onSuccess" :menuData="state.tableData.data" :id="state.row.id"
+				:parent_id="state.row.parent_id" />
 			<template #footer>
 				<span class="dialog-footer">
 					<el-button size="default" @click="onCancel">取 消</el-button>
@@ -203,7 +216,7 @@ const onTabelRowDel = (row: MenuInfo) => {
 					ElMessage.error('删除失败');
 				});
 		})
-		.catch(() => {});
+		.catch(() => { });
 };
 // 页面加载时
 onMounted(() => {

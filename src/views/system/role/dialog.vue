@@ -13,22 +13,26 @@
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 				<el-form-item label="排序" prop="sort">
-					<el-input-number v-model="state.ruleForm.sort" :min="0" :max="999" controls-position="right" placeholder="请输入排序" class="w100" />
+					<el-input-number v-model="state.ruleForm.sort" :min="0" :max="999" controls-position="right"
+						placeholder="请输入排序" class="w100" />
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="12" :md="12" :lg="12" :xl="12" class="mb20">
 				<el-form-item label="角色状态" prop="status">
-					<el-switch v-model="state.ruleForm.status" inline-prompt active-text="启" inactive-text="禁"></el-switch>
+					<el-switch v-model="state.ruleForm.status" inline-prompt active-text="开启" inactive-text="禁用"
+						:active-value="1" :inactive-value="0"></el-switch>
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="角色描述" prop="describe">
-					<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入角色描述" maxlength="150"></el-input>
+					<el-input v-model="state.ruleForm.describe" type="textarea" placeholder="请输入角色描述"
+						maxlength="150"></el-input>
 				</el-form-item>
 			</el-col>
 			<el-col :xs="24" :sm="24" :md="24" :lg="24" :xl="24" class="mb20">
 				<el-form-item label="菜单权限">
-					<el-tree ref="treeRef" node-key="id" :data="state.menuData" :props="state.menuProps" show-checkbox class="menu-data-tree" />
+					<el-tree ref="treeRef" node-key="id" :data="state.menuData" :props="state.menuProps" show-checkbox
+						class="menu-data-tree" />
 				</el-form-item>
 			</el-col>
 		</el-row>
@@ -53,7 +57,7 @@ const state = reactive({
 		name: '', // 角色名称
 		sign: '', // 角色标识
 		sort: 0, // 排序
-		status: true, // 角色状态
+		status: 1, // 角色状态
 		describe: '', // 角色描述
 		menu_ids: [],
 	} as RoleCreateRequest,

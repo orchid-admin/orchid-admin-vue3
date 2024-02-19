@@ -2,19 +2,17 @@
 	<div class="system-user-container layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto h100">
 			<div class="system-user-search mb15">
-				<el-input v-model="state.search.keyword" size="default" placeholder="请输入用户名称" style="max-width: 180px"> </el-input>
-				<el-select v-model="state.search.role_id" class="m-2" placeholder="请选择角色" size="default">
+				<el-input v-model="state.search.keyword" size="default" placeholder="请输入用户名称" style="max-width: 180px">
+				</el-input>
+				<el-select v-model="state.search.role_id" class="m-2" placeholder="请选择角色" size="default" clearable>
 					<el-option v-for="item in state.roles" :key="item.id" :label="item.name" :value="item.id" />
 				</el-select>
-				<el-cascader
-					v-model="state.search.dept_id"
-					:options="state.depts"
-					:props="deptsDefaultProps"
-					:show-all-levels="false"
-					size="default"
-					placeholder="请选择部门"
-					clearable
-				/>
+				<el-cascader v-model="state.search.dept_id" :options="state.depts" :props="deptsDefaultProps"
+					:show-all-levels="false" size="default" placeholder="请选择部门" clearable />
+				<el-select v-model="state.search.status" class="m-2" placeholder="状态" size="default" clearable>
+					<el-option label="开启" :value="1" />
+					<el-option label="禁用" :value="0" />
+				</el-select>
 				<el-button size="default" type="primary" class="ml10" @click="onSearchQuery">
 					<el-icon>
 						<ele-Search />
@@ -50,23 +48,17 @@
 				<el-table-column prop="created_at" label="创建时间" width="180" show-overflow-tooltip></el-table-column>
 				<el-table-column label="操作" width="100">
 					<template #default="scope">
-						<el-button :disabled="!scope.row._can_edit" size="small" text type="primary" @click="onOpenEditUser(scope.row)">修改</el-button>
-						<el-button :disabled="!scope.row._can_delete" size="small" text type="primary" @click="onRowDel(scope.row)">删除</el-button>
+						<el-button :disabled="!scope.row._can_edit" size="small" text type="primary"
+							@click="onOpenEditUser(scope.row)">修改</el-button>
+						<el-button :disabled="!scope.row._can_delete" size="small" text type="primary"
+							@click="onRowDel(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
-			<el-pagination
-				@size-change="onHandleSizeChange"
-				@current-change="onHandleCurrentChange"
-				class="mt15"
-				:pager-count="5"
-				:page-sizes="[10, 20, 30]"
-				v-model:current-page="state.search.page"
-				background
-				v-model:page-size="state.search.limit"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="state.tableData.total"
-			>
+			<el-pagination @size-change="onHandleSizeChange" @current-change="onHandleCurrentChange" class="mt15"
+				:pager-count="5" :page-sizes="[10, 20, 30]" v-model:current-page="state.search.page" background
+				v-model:page-size="state.search.limit" layout="total, sizes, prev, pager, next, jumper"
+				:total="state.tableData.total">
 			</el-pagination>
 		</el-card>
 		<el-dialog :title="state.dialog.title" v-model="state.dialog.isShowDialog" width="769px" destroy-on-close>
@@ -173,7 +165,7 @@ const onRowDel = (row: UserList) => {
 				ElMessage.success('删除成功');
 			});
 		})
-		.catch(() => {});
+		.catch(() => { });
 };
 // 分页改变
 const onHandleSizeChange = (val: number) => {
@@ -204,6 +196,7 @@ onMounted(() => {
 		flex-direction: column;
 		flex: 1;
 		overflow: auto;
+
 		.el-table {
 			flex: 1;
 		}
