@@ -1,13 +1,17 @@
 <template>
 	<div class="system-dic-container layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto">
-			<div class="system-user-search mb15">
-				<el-input v-model="state.search.keyword" size="default" placeholder="请输入字典名称" style="max-width: 180px">
-				</el-input>
-				<el-select v-model="state.search.status" class="m-2" placeholder="状态" size="default" clearable>
-					<el-option label="开启" :value="1" />
-					<el-option label="禁用" :value="0" />
-				</el-select>
+			<el-row class="system-user-search mb15">
+				<el-col :xs="24" :sm="6" :md="8" :lg="3" :xl="11" class="mb20 pr10">
+					<el-input v-model="state.search.keyword" size="default" placeholder="请输入字典名称" style="max-width: 180px">
+					</el-input>
+				</el-col>
+				<el-col :xs="24" :sm="6" :md="8" :lg="3" :xl="11" class="mb20 pr10">
+					<el-select v-model="state.search.status" class="m-2" placeholder="状态" size="default" clearable>
+						<el-option label="开启" :value="1" />
+						<el-option label="禁用" :value="0" />
+					</el-select>
+				</el-col>
 				<el-button size="default" type="primary" class="ml10" @click="onSearchQuery">
 					<el-icon>
 						<ele-Search />
@@ -20,7 +24,7 @@
 					</el-icon>
 					新增字典
 				</el-button>
-			</div>
+			</el-row>
 			<el-table :data="state.tableData.data" v-loading="state.tableData.loading" style="width: 100%">
 				<el-table-column prop="id" label="ID" width="50" />
 				<el-table-column prop="name" label="字典名称" show-overflow-tooltip></el-table-column>

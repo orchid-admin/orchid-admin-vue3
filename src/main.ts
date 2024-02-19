@@ -8,7 +8,7 @@ import other from '/@/utils/other';
 import ElementPlus from 'element-plus';
 import '/@/theme/index.scss';
 import VueGridLayout from 'vue-grid-layout';
-import localLangZhCn from 'element-plus/lib/locale/lang/zh-cn';
+import localLangZhCn from 'element-plus/es/locale/lang/zh-cn';
 import 'element-plus/theme-chalk/display.css';
 
 const app = createApp(App);

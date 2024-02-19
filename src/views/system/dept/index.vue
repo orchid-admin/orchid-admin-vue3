@@ -1,13 +1,17 @@
 <template>
 	<div class="system-dept-container layout-padding">
 		<el-card shadow="hover" class="layout-padding-auto">
-			<div class="system-dept-search mb15">
-				<el-input v-model="state.search.keyword" size="default" placeholder="请输入部门名称" style="max-width: 180px">
-				</el-input>
-				<el-select v-model="state.search.status" class="m-2" placeholder="状态" size="default" clearable>
-					<el-option label="开启" :value="1" />
-					<el-option label="禁用" :value="0" />
-				</el-select>
+			<el-row class="system-dept-search mb15">
+				<el-col :xs="24" :sm="6" :md="8" :lg="3" :xl="11" class="mb20 pr10">
+					<el-input v-model="state.search.keyword" size="default" placeholder="请输入部门名称">
+					</el-input>
+				</el-col>
+				<el-col :xs="24" :sm="6" :md="8" :lg="3" :xl="11" class="mb20 pr10">
+					<el-select v-model="state.search.status" class="m-2" placeholder="状态" size="default" clearable>
+						<el-option label="开启" :value="1" />
+						<el-option label="禁用" :value="0" />
+					</el-select>
+				</el-col>
 				<el-button size="default" type="primary" class="ml10" @click="onSearchQuery">
 					<el-icon>
 						<ele-Search />
@@ -20,7 +24,7 @@
 					</el-icon>
 					新增部门
 				</el-button>
-			</div>
+			</el-row>
 			<el-table :data="state.tableData.data" empty-text="暂无数据" v-loading="state.loading" style="width: 100%"
 				row-key="id" default-expand-all :tree-props="{ children: 'children', hasChildren: 'hasChildren' }">
 				<el-table-column label="部门名称" show-overflow-tooltip>
